@@ -23,6 +23,9 @@
       "src/Resources/contao/dca/",
       "src/Resources/contao/languages/",
       "src/Resources/contao/templates/"
+    ],
+    "files": [
+      "src/Resources/contao/functions.php"
     ]
   },
   "extra": {
