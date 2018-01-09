@@ -1,0 +1,26 @@
+<div<?php echo isset($this->arr_moreData['id']) ? ' id="'.$this->arr_moreData['id'].'"' : ''; ?> class="flexWidget flexWidget_default<?php echo isset($this->arr_moreData['class']) ? ' '.$this->arr_moreData['class'] : ''; ?>">
+	<?php if ($this->arr_moreData['headline']) { ?>
+		<h2><?php echo $this->arr_moreData['headline']; ?></h2>
+	<?php } ?>
+
+	<?php if (isset($this->str_label) && $this->str_label) { ?>
+		<label for="<?php echo $this->str_name; ?>"><?php echo $this->str_label; ?></label>
+	<?php } ?>
+	<select name="<?php echo $this->str_name; ?>" id="<?php echo $this->str_name; ?>">
+		<?php
+		foreach ($this->arr_moreData['arr_options'] as $arr_option) {
+			?>
+			<option value="<?php echo $arr_option['value']; ?>"<?php echo $arr_option['value'] == $this->var_value ? ' selected' : ''?>><?php echo $arr_option['label']; ?></option>
+			<?php
+		}
+		?>
+	</select>
+
+	<?php if (is_array($this->arr_errors) && count($this->arr_errors)) { ?>
+		<div class="errors">
+			<?php foreach ($this->arr_errors as $str_errorMsg) { ?>
+				<p class="error"><?php echo $str_errorMsg; ?></p>
+			<?php } ?>
+		</div>
+	<?php } ?>
+</div>
