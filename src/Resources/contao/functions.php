@@ -84,7 +84,7 @@ function ls_toggleLogClass() {
  * logging for specific log classes (see ls_toggleLogClass()). By default, logging
  * is deactivated, except for the logClass 'perm' which will always be logged.
  */
-function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true) {
+function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '') {
 	if (
 			!$logClass
 		||	(
@@ -105,6 +105,10 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
 		) {
 			return;
 		}
+	}
+
+	if (!$str_logPath) {
+		$str_logPath = __DIR__.'/log';
 	}
 	
 	if ($blnReplaceUUIDs) {
@@ -138,7 +142,10 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
 		}
 	}
 	if ($title || $varErrorText) {
-		error_log('['.$GLOBALS['lsErrorLog']['testcounter'].'] '.($title ? $title."\r\n" : '').$varErrorText."\r\n", 3, TL_ROOT.'/lsErrorLog.log');
+		if (!file_exists($str_logPath) || !is_dir($str_logPath)) {
+			mkdir($str_logPath);
+		}
+		error_log('['.$GLOBALS['lsErrorLog']['testcounter'].'] '.($title ? $title."\r\n" : '').$varErrorText."\r\n", 3, $str_logPath.'/lsErrorLog.log');
 	}
 }
 
@@ -146,7 +153,7 @@ function replaceUUIDsInErrorLog($var) {
 	/*
 	 * Objects are currently not supported
 	 */
-	if (is_object($var) || version_compare(VERSION, '3.0', '<')) {
+	if (is_object($var)) {
 		return $var;
 	}
 	

@@ -23,7 +23,7 @@ class ModuleFlexWidgetTest extends \Module
 				'str_uniqueName' => 'tfw_firstname',
 				'arr_validationFunctions' => array(
 					array(
-						'str_className' => 'FlexWidgetValidator',
+						'str_className' => 'LeadingSystems\Helpers\FlexWidgetValidator',
 						'str_methodName' => 'isFilled'
 					)
 				),
@@ -41,7 +41,7 @@ class ModuleFlexWidgetTest extends \Module
 				'str_uniqueName' => 'tfw_lastname',
 				'arr_validationFunctions' => array(
 					array(
-						'str_className' => 'FlexWidgetValidator',
+						'str_className' => 'LeadingSystems\Helpers\FlexWidgetValidator',
 						'str_methodName' => 'isFilled'
 					)
 				),
@@ -59,7 +59,7 @@ class ModuleFlexWidgetTest extends \Module
 				!$obj_tfw_firstname->bln_hasErrors
 				&& !$obj_tfw_lastname->bln_hasErrors
 			) {
-				dump('Hi ' . $obj_tfw_firstname->getValue() . ' ' . $obj_tfw_lastname->getValue());
+				lsErrorLog('Hi ' . $obj_tfw_firstname->getValue() . ' ' . $obj_tfw_lastname->getValue(), '', 'perm');
 				$_SESSION['leadingSystems']['test']['tfw_firstname'] = $obj_tfw_firstname->getValue();
 				$_SESSION['leadingSystems']['test']['tfw_lastname'] = $obj_tfw_lastname->getValue();
 				\Controller::reload();
