@@ -279,6 +279,32 @@ function ls_getFilePathFromVariableSources($src) {
 }
 
 /*
+ * This function is made especially for Merconis and probably not of much use for anything but the use case described below.
+ *
+ * When Merconis used Contao listwizards, values were stored as serialized one-dimensional arrays. In order to process
+ * those values, we had to create multi-dimensional arrays using the function "createMultidimensionalArray".
+ *
+ * Now Merconis uses LSJS widget modules and therefore values are stored as two-dimensional arrays in JSON.
+ * Because we wanted the change that came with using LSJS widget modules in Merconis to be as minimally invasive as possible,
+ * we didn't want to touch value processing in Merconis at all and the easiest way to do this was to create one-dimensional arrays
+ * from the JSON data so that every step that follows can stay exactly the same as before. And that's what this function
+ * is needed for.
+ */
+function createOneDimensionalArrayFromTwoDimensionalArray($arr_input) {
+	$arr_oneDimensionalOutput = [];
+	if (!is_array($arr_input)) {
+		return $arr_oneDimensionalOutput;
+	}
+
+	foreach ($arr_input as $arr_level1) {
+		foreach ($arr_level1 as $var_valueLevel2) {
+			$arr_oneDimensionalOutput[] = $var_valueLevel2;
+		}
+	}
+	return $arr_oneDimensionalOutput;
+}
+
+/*
  * Diese Funktion wird verwendet, um eindimensionale Arrays, wie sie von den Contao-Listenwizards erstellt werden,
  * in brauchbare, mehrdimensionale Arrays umzuwandeln.
  * $numRelatedElements bestimmt, wieviele Elemente des eindimensionalen Arrays zusammengehören,
