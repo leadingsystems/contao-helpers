@@ -335,4 +335,29 @@ class ls_helpers_controller extends \Controller {
 
 		return key_exists(strtoupper($str_input), $arr_countryCodeMapping) ? $arr_countryCodeMapping[strtoupper($str_input)] : $str_input;
 	}
+
+	/*
+	 * This function returns the current request url without some or all GET parameters
+	 */
+	public static function getUrl($blnEncode = true, $removeKeys = array(), $keepKeys = array())
+	{
+		$url = ampersand(\Environment::get('request'), $blnEncode);
+
+		if (is_array($removeKeys)) {
+			foreach ($removeKeys as $v) {
+				$url = preg_replace('/(&|&amp;|\?)' . $v . '=.*((&|&amp;)|$)/siU', '\\3', $url);
+			}
+		} else if ($removeKeys == 'all') {
+			$url = preg_replace('/\?.*$/siU', '', $url);
+
+			array_insert($keepKeys, 0, array('do'));
+			$count = 0;
+			foreach ($keepKeys as $key) {
+				$url = $url . (!$count ? '?' : '&') . $key . '=' . \Input::get($key);
+				$count++;
+			}
+		}
+
+		return $url;
+	}
 }
