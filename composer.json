@@ -7,6 +7,7 @@
     "bundle"
   ],
   "type": "contao-bundle",
+  "license": "proprietary",
   "require": {
     "php": ">=7.0.0",
     "contao/core-bundle": "~4.4"
@@ -29,6 +30,9 @@
     ]
   },
   "extra": {
-    "contao-manager-plugin": "LeadingSystems\\HelpersBundle\\ContaoManager\\Plugin"
+    "contao-manager-plugin": "LeadingSystems\\HelpersBundle\\ContaoManager\\Plugin",
+    "branch-alias": {
+      "dev-master": "2.0.x-dev"
+    }
   }
 }
