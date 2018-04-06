@@ -8,10 +8,12 @@
 	<?php } ?>
 	<select name="<?php echo $this->str_name; ?>" id="<?php echo $this->str_name; ?>">
 		<?php
-		foreach ($this->arr_moreData['arr_options'] as $arr_option) {
-			?>
-			<option value="<?php echo $arr_option['value']; ?>"<?php echo $arr_option['value'] == $this->var_value ? ' selected' : ''?>><?php echo $arr_option['label']; ?></option>
-			<?php
+		if (is_array($this->arr_moreData['arr_options'])) {
+			foreach ($this->arr_moreData['arr_options'] as $arr_option) {
+				?>
+				<option value="<?php echo $arr_option['value']; ?>"<?php echo $arr_option['value'] == $this->var_value ? ' selected' : ''?>><?php echo $arr_option['label']; ?></option>
+				<?php
+			}
 		}
 		?>
 	</select>
