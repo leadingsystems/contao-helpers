@@ -5,4 +5,4 @@ e-commerce extension Merconis. Standalone usage is not recommended.
 
 For more information visit the [Merconis website](https://merconis.com)
 
-Test to comit in helpers
+Some change try to push on master
