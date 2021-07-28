@@ -4,3 +4,5 @@ This helpers bundle is meant to assist other Leading Systems extensions such as 
 e-commerce extension Merconis. Standalone usage is not recommended.
 
 For more information visit the [Merconis website](https://merconis.com)
+
+Changes only an development
