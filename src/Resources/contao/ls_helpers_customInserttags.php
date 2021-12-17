@@ -25,7 +25,7 @@ class ls_helpers_customInserttags extends \Controller {
 
 			case 'text':
 				$arr_matches = array();
-				preg_match_all('/\[\'(.*)\'\]/U', $params, $arr_matches);
+				preg_match_all('/\[\'(.*)\'\]/U', html_entity_decode($params, ENT_QUOTES), $arr_matches);
 
 				$arr_textPathParts = $arr_matches[1];
 
