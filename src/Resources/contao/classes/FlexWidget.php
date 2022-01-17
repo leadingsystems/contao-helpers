@@ -222,42 +222,40 @@ class FlexWidget
 		$this->arr_moreData = $this->arr_configuration['arr_moreData'];
 	}
 
-	protected function getSubmittedValue()
-	{
-		$obj_request = Request::createFromGlobals();
+    protected function getSubmittedValue()
+    {
+        if (
+            (
+                !$this->str_allowedRequestMethod
+                || $this->str_allowedRequestMethod === 'post'
+            )
+            && \Input::post($this->str_name) !== null
+        ) {
+            /*
+             * Get the value from POST data if there's either no restriction regarding the allowed request methods
+             * or the POST method is set explicitly
+             */
+            $this->var_value = \Input::post($this->str_name);
+            $this->bln_receivedData = true;
+            return;
+        }
 
-		if (
-			(
-				!$this->str_allowedRequestMethod
-				|| $this->str_allowedRequestMethod === 'post'
-			)
-			&& $obj_request->request->get($this->str_name) !== null
-		) {
-			/*
-			 * Get the value from POST data if there's either no restriction regarding the allowed request methods
-			 * or the POST method is set explicitly
-			 */
-			$this->var_value = $obj_request->request->get($this->str_name);
-			$this->bln_receivedData = true;
-			return;
-		}
-
-		if (
-			(
-				!$this->str_allowedRequestMethod
-				|| $this->str_allowedRequestMethod === 'get'
-			)
-			&& $obj_request->query->get($this->str_name) !== null
-		) {
-			/*
-			 * Get the value from GET data if there's either no restriction regarding the allowed request methods
-			 * or the GET method is set explicitly
-			 */
-			$this->var_value = $obj_request->query->get($this->str_name);
-			$this->bln_receivedData = true;
-			return;
-		}
-	}
+        if (
+            (
+                !$this->str_allowedRequestMethod
+                || $this->str_allowedRequestMethod === 'get'
+            )
+            && \Input::get($this->str_name) !== null
+        ) {
+            /*
+             * Get the value from GET data if there's either no restriction regarding the allowed request methods
+             * or the GET method is set explicitly
+             */
+            $this->var_value = \Input::get($this->str_name);
+            $this->bln_receivedData = true;
+            return;
+        }
+    }
 
 	protected function validate()
 	{
