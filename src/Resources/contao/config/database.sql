@@ -8,4 +8,4 @@ CREATE TABLE `tl_ls_helpers_segmentizer` (
 	`currentTurn` int(10) unsigned NOT NULL default '1',
 	`nextCallIsNewTurn` char(1) NOT NULL default ''
   PRIMARY KEY  (`segmentationToken`),
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT;
