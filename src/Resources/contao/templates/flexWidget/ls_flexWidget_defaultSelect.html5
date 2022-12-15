@@ -1,5 +1,5 @@
 <div<?php echo isset($this->arr_moreData['id']) ? ' id="'.$this->arr_moreData['id'].'"' : ''; ?> class="flexWidget flexWidget_default<?php echo isset($this->arr_moreData['class']) ? ' '.$this->arr_moreData['class'] : ''; ?>">
-	<?php if ($this->arr_moreData['headline']) { ?>
+	<?php if ($this->arr_moreData['headline'] ?? null) { ?>
 		<h2><?php echo $this->arr_moreData['headline']; ?></h2>
 	<?php } ?>
 
