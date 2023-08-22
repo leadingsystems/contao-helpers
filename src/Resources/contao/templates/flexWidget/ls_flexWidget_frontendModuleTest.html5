@@ -2,7 +2,7 @@
 	<h1>Testing FlexWidget</h1>
 	<div>
 		<form action="<?php echo \Environment::get('request'); ?>" class="tl_form" method="post">
-			<input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
+			<input type="hidden" name="REQUEST_TOKEN" value="<?=System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue()?>">
 			<input type="hidden" name="FORM_SUBMIT" value="testFlexWidget">
 			<?php echo $this->str_tfw_firstname; ?>
 			<?php echo $this->str_tfw_lastname; ?>
