@@ -2,11 +2,13 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\System;
+
 class ModuleFlexWidgetTest extends \Module
 {
 	public function generate()
 	{
-		if (TL_MODE == 'BE') {
+		if (System::getContainer()->get('merconis.routing.scope_matcher')->isBackend()) {
 			$objTemplate = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### LS FlexWidget Test ###';
 			return $objTemplate->parse();
