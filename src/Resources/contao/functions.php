@@ -557,3 +557,48 @@ function addQueryParameters($arr_parameters = null, $str_url = null) {
 
 	return $str_url;
 }
+
+
+//21.01.2022 ein etwas kürzerer Aufruf und der aufrufende Funktionsname wird immer vorne mit ausgegeben
+//01.02.2022, auch der title sollte optional sein
+//14.03.2023, erster Parameter $var kann ein einfacher String sein (falls man nur Meldungen ausgeben will)
+function logge($var = null, $title = '') {
+
+    //03.02.2022, nur um zu steuern bei welchen call-Aufrufen was ausgegeben werden soll.
+    if (isset($GLOBALS['logenabled']) && $GLOBALS['logenabled'] !== true) {
+        return;
+    }
+
+    $str_variableName = '';
+    //04.02.2022, ein versuch den Namen der Variable zu ermitteln, die man an logge($var... übergeben hat
+//TODO: es muss keine Variable sein, es kann auch der Rückgabewert einer Funktion sein z.B. \Input::post('configurator_productVariantID')
+    $trace = debug_backtrace();
+    $file = $trace[0]['file'];
+    #$vLine = file( __FILE__ );
+    $vLine = file( $file );
+    $fLine = $vLine[ $trace[0]['line'] - 1 ];
+    preg_match( "#\\$((\w|\->|\[)+)#", $fLine, $match );
+    $str_variableName = $match[0];
+
+    list(, $caller) = debug_backtrace(false);
+    $str_callerFunction = $caller['function'];
+
+    if ($str_variableName == '' && $title == '' && is_string($var)) {
+        //keine Variable zum ersten Parameter $var gefunden
+        lsErrorLog($str_callerFunction.': [TEXT]'.$title, $var, 'perm');
+
+        //if ($title == '') {
+            //if (is_string($var)) {
+                //Parameter ist ein String -> direkt so ausgeben
+                //lsErrorLog($str_callerFunction.': [TEXT]'.$title, $var, 'perm');
+            //}
+        //} else {
+            //Parameter $var ist zwar keine bekannte Variable, aber vielleicht ein Ausdruck
+            //lsErrorLog($str_callerFunction.': '.$str_variableName.': '.$title, $var, 'perm');
+        //}
+
+    } else {
+        //Parameter $var ist eine bekannte Variable
+        lsErrorLog($str_callerFunction.': '.$str_variableName.': '.$title, $var, 'perm');
+    }
+}
