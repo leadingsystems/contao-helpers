@@ -6,69 +6,7 @@ if (!isset($_SESSION['ls_helpers'])) {
 	$_SESSION['ls_helpers'] = array();
 }
 
-/*
- * This function activates or deactivates logging with lsErrorLog for given
- * log classes.
- */
-function ls_toggleLogClass() {
-	if (version_compare(VERSION, '3.0', '>=')) {
-		if (!\Input::get('ls_toggleLogClass')) {
-			return;
-		}
-	} else {
-		if (!$_GET['ls_toggleLogClass']) {
-			return;
-		}		
-	}
-
-	$arr_logClasses = null;
-	
-	if (version_compare(VERSION, '3.0', '>=')) {
-		if (\Input::get('ls_useLogClasses')) {
-			$arr_logClasses = explode(',', \Input::get('ls_useLogClasses'));
-		}
-	} else {
-		if ($_GET['ls_useLogClasses']) {
-			$arr_logClasses = explode(',', $_GET['ls_useLogClasses']);
-		}
-	}
-	
-	if (!isset($_SESSION['ls_helpers']['arr_activatedLogClasses'])) {
-		$_SESSION['ls_helpers']['arr_activatedLogClasses'] = array();
-	}
-
-	if (
-			version_compare(VERSION, '3.0', '>=') && \Input::get('ls_toggleLogClass') === 'on'
-		||	version_compare(VERSION, '3.0', '<') && $_GET['ls_toggleLogClass'] === 'on'
-	) {
-		if (!is_array($arr_logClasses)) {
-			// activate logging for all classes if no log classes were given explicitly
-			$_SESSION['ls_helpers']['arr_activatedLogClasses'] = array('all');
-		} else {
-			// activate given log classes
-			foreach ($arr_logClasses as $str_logClass) {
-				if (!in_array($str_logClass, $_SESSION['ls_helpers']['arr_activatedLogClasses'])) {
-					$_SESSION['ls_helpers']['arr_activatedLogClasses'][] = $str_logClass;
-				}
-			}
-		}
-	} else {
-		if (!is_array($arr_logClasses)) {
-			// deactivate logging for all classes if no log classes were given explicitly
-			$_SESSION['ls_helpers']['arr_activatedLogClasses'] = array();
-		} else {
-			// deactivate given log classes
-			foreach ($arr_logClasses as $str_logClass) {
-				$int_keyForLogClass = array_search($str_logClass, $_SESSION['ls_helpers']['arr_activatedLogClasses']);
-				if ($int_keyForLogClass !== false) {
-					unset($_SESSION['ls_helpers']['arr_activatedLogClasses'][$int_keyForLogClass]);
-				}
-			}
-		}
-	}
-	
-	lsErrorLog("\$_SESSION['ls_helpers']['arr_activatedLogClasses']", $_SESSION['ls_helpers']['arr_activatedLogClasses'], 'perm');
-}
+//22.09.2023, tbu, ls_toggleLogClass entfernt, https://lsboard.de/project/18/task/6112
 
 /*
  * Activate the tmp log class like so: http://whatever.de?ls_toggleLogClass=on&ls_useLogClasses=tmp
