@@ -79,9 +79,7 @@ function lsErrorLog($var_variableOrString, $str_comment = '', $str_mode = 'regul
 	$GLOBALS['lsErrorLog']['testcounter'] = isset($GLOBALS['lsErrorLog']['testcounter']) ? $GLOBALS['lsErrorLog']['testcounter'] : 0;
 	$GLOBALS['lsErrorLog']['testcounter']++;
 
-	if ($str_mode == 'var_dump'
-        //|| is_array($var_variableOrString) || is_object($var_variableOrString)
-        ) {
+	if ($str_mode == 'var_dump') {
 		ob_start();
 		var_dump($var_variableOrString);
 		$str_errorText = ob_get_clean();
@@ -111,12 +109,7 @@ function lsErrorLog($var_variableOrString, $str_comment = '', $str_mode = 'regul
 			mkdir($str_logPath);
 		}
 		error_log(
-		    '['.$GLOBALS['lsErrorLog']['testcounter'].'] '
-            .($str_title ? $str_title."\r\n" : '')
-            .$str_errorText
-            ."\r\n"
-            , 3
-            , $str_logPath.'/lsErrorLog.log');
+		    '['.$GLOBALS['lsErrorLog']['testcounter'].'] ' .($str_title ? $str_title."\r\n" : '') .$str_errorText ."\r\n", 3, $str_logPath.'/lsErrorLog.log');
 	}
 }
 
