@@ -21,69 +21,102 @@ if (!isset($_SESSION['ls_helpers'])) {
  * parameters 'ls_toggleLogClass' and 'ls_useLogClasses' it is possible to activate
  * logging for specific log classes (see ls_toggleLogClass()). By default, logging
  * is deactivated, except for the logClass 'perm' which will always be logged.
+ *
+ * 22.09.2023, umbau/vereinheitlichung der Logge mit lsErrorlog
+ *
+ * @param       $var_variableOrString       string oder variable die zu loggen ist
+ * @param       $str_comment                optional string, zusätzlicher Text für die erste Titelzeile
+ * @param       $str_mode                   optional string, default 'regular' oder 'var_dump'
+ * @param       $blnReplaceUUIDs            optional boolean, default true
+ * @param       $str_logPath                optional string, Pfad zum logfile, default __DIR__.'/log'
+ *
  */
-function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '') {
-	if (
-			!$logClass
-		||	(
-					$logClass !== 'perm'
-				&&	(
-							!isset($_SESSION['ls_helpers']['arr_activatedLogClasses'])
-						||	!is_array($_SESSION['ls_helpers']['arr_activatedLogClasses'])
-					)
-			)
-	) {
-		return;
-	}
-	
-	if ($logClass !== 'perm') {
-		if (
-				!in_array($logClass, $_SESSION['ls_helpers']['arr_activatedLogClasses'])
-			&&	!in_array('all', $_SESSION['ls_helpers']['arr_activatedLogClasses'])
-		) {
-			return;
-		}
-	}
+function lsErrorLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '') {
+
+    //04.02.2022, ein versuch den Namen der Variable zu ermitteln, die man an lsErrorlog($var_variableOrString... übergeben hat
+    $arr_trace = debug_backtrace();
+
+    //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
+    $str_file = $arr_trace[0]['file'];
+    $int_line = $arr_trace[0]['line'];
+    $str_fileContent = file($str_file);
+    $str_callerLine = $str_fileContent[ $int_line - 1 ];
+
+    //Matcht Variablennamen und auch Keys z.B. $myvar oder $myvar['caption']
+    preg_match( "#(\\$\w?\\b.+?)(,|\))#", $str_callerLine, $arr_match);
+    $str_variableName = $arr_match[1];
+
+    //Vorherigen Call entnehmen
+    list(, $arr_call) = debug_backtrace(false);
+    $str_callerFunction = $arr_call['function'];
+    $str_callerClass = $arr_call['class'];
+
+    //Erste Titelzeile zusammenbauen
+    $str_title = ($str_callerClass ? $str_callerClass . '::' : '')  . $str_callerFunction . ': LINE ' . $int_line;
+
+
+    if ($str_variableName == '' && is_string($var_variableOrString)) {
+        //keine Variable zum ersten Parameter $var_variableOrString gefunden
+        $str_title .= ' TEXT:';
+
+    } else {
+        //Parameter $var_variableOrString ist eine bekannte Variable
+        $str_title .= ' VAR: ' . $str_variableName;
+    }
+
+    //Kommentar anhängen, sofern als zweiten Parameter übergeben
+    $str_title .= ($str_comment ? ' - '.$str_comment : '');
+
 
 	if (!$str_logPath) {
 		$str_logPath = __DIR__.'/log';
 	}
 	
 	if ($blnReplaceUUIDs) {
-		$var = replaceUUIDsInErrorLog($var);
+		$var_variableOrString = replaceUUIDsInErrorLog($var_variableOrString);
 	}
 	
 	$GLOBALS['lsErrorLog']['testcounter'] = isset($GLOBALS['lsErrorLog']['testcounter']) ? $GLOBALS['lsErrorLog']['testcounter'] : 0;
 	$GLOBALS['lsErrorLog']['testcounter']++;
-	
-	if ($mode == 'var_dump') {
+
+	if ($str_mode == 'var_dump'
+        //|| is_array($var_variableOrString) || is_object($var_variableOrString)
+        ) {
 		ob_start();
-		var_dump($var);
-		$varErrorText = ob_get_clean();
-	} else if (is_array($var)) {
+		var_dump($var_variableOrString);
+		$str_errorText = ob_get_clean();
+
+	} else if (is_array($var_variableOrString)) {
 		ob_start();
-		print_r($var);
-		$varErrorText = ob_get_clean();
-	} else if (is_object($var)) {
+		print_r($var_variableOrString);
+		$str_errorText = ob_get_clean();
+	} else if (is_object($var_variableOrString)) {
 		ob_start();
-		print_r($var);
-		$varErrorText = ob_get_clean();
+		print_r($var_variableOrString);
+		$str_errorText = ob_get_clean();
+
 	} else {
-		if ($var === true) {
-			$varErrorText = 'TRUE';
-		} else if ($var === false) {
-			$varErrorText = 'FALSE';
-		} else if ($var === null) {
-			$varErrorText = 'NULL';
+		if ($var_variableOrString === true) {
+			$str_errorText = 'TRUE';
+		} else if ($var_variableOrString === false) {
+			$str_errorText = 'FALSE';
+		} else if ($var_variableOrString === null) {
+			$str_errorText = 'NULL';
 		} else {
-			$varErrorText = $var;
+			$str_errorText = $var_variableOrString;
 		}
 	}
-	if ($title || $varErrorText) {
+	if ($str_title || $var_variableOrString) {
 		if (!file_exists($str_logPath) || !is_dir($str_logPath)) {
 			mkdir($str_logPath);
 		}
-		error_log('['.$GLOBALS['lsErrorLog']['testcounter'].'] '.($title ? $title."\r\n" : '').$varErrorText."\r\n", 3, $str_logPath.'/lsErrorLog.log');
+		error_log(
+		    '['.$GLOBALS['lsErrorLog']['testcounter'].'] '
+            .($str_title ? $str_title."\r\n" : '')
+            .$str_errorText
+            ."\r\n"
+            , 3
+            , $str_logPath.'/lsErrorLog.log');
 	}
 }
 
