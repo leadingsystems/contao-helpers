@@ -22,7 +22,7 @@ if (!isset($_SESSION['ls_helpers'])) {
  * logging for specific log classes (see ls_toggleLogClass()). By default, logging
  * is deactivated, except for the logClass 'perm' which will always be logged.
  *
- * 22.09.2023, umbau/vereinheitlichung der Logge mit lsErrorlog
+ * 22.09.2023, umbau/vereinheitlichung der Logge mit lsErrorlog. 25.09.2023, umbenannt zu lsDebugLog
  *
  * @param       $var_variableOrString       string oder variable die zu loggen ist
  * @param       $str_comment                optional string, zusätzlicher Text für die erste Titelzeile
@@ -31,9 +31,9 @@ if (!isset($_SESSION['ls_helpers'])) {
  * @param       $str_logPath                optional string, Pfad zum logfile, default __DIR__.'/log'
  *
  */
-function lsErrorLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '') {
+function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '') {
 
-    //04.02.2022, ein versuch den Namen der Variable zu ermitteln, die man an lsErrorlog($var_variableOrString... übergeben hat
+    //04.02.2022, ein versuch den Namen der Variable zu ermitteln, die man an lsDebugLog($var_variableOrString... übergeben hat
     $arr_trace = debug_backtrace();
 
     //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
@@ -76,8 +76,8 @@ function lsErrorLog($var_variableOrString, $str_comment = '', $str_mode = 'regul
 		$var_variableOrString = replaceUUIDsInErrorLog($var_variableOrString);
 	}
 	
-	$GLOBALS['lsErrorLog']['testcounter'] = isset($GLOBALS['lsErrorLog']['testcounter']) ? $GLOBALS['lsErrorLog']['testcounter'] : 0;
-	$GLOBALS['lsErrorLog']['testcounter']++;
+	$GLOBALS['lsDebugLog']['testcounter'] = isset($GLOBALS['lsDebugLog']['testcounter']) ? $GLOBALS['lsDebugLog']['testcounter'] : 0;
+	$GLOBALS['lsDebugLog']['testcounter']++;
 
 	if ($str_mode == 'var_dump') {
 		ob_start();
@@ -109,7 +109,7 @@ function lsErrorLog($var_variableOrString, $str_comment = '', $str_mode = 'regul
 			mkdir($str_logPath);
 		}
 		error_log(
-		    '['.$GLOBALS['lsErrorLog']['testcounter'].'] ' .($str_title ? $str_title."\r\n" : '') .$str_errorText ."\r\n", 3, $str_logPath.'/lsErrorLog.log');
+		    '['.$GLOBALS['lsDebugLog']['testcounter'].'] ' .($str_title ? $str_title."\r\n" : '') .$str_errorText ."\r\n", 3, $str_logPath.'/lsDebugLog.log');
 	}
 }
 
@@ -196,7 +196,7 @@ function performanceCheckResults() {
 #	return;
 	if (is_array($_SESSION['ls_x']['performanceCheck'])) {
 		foreach ($_SESSION['ls_x']['performanceCheck'] as $key => $arrPerformance) {
-			lsErrorLog('Performance check ('.$key.' [starts: '.$arrPerformance['numStarts'].', stops: '.$arrPerformance['numStarts'].']): '. $arrPerformance['description'], $arrPerformance['time'], 'tmp', 'var_dump', false);
+			lsDebugLog('Performance check ('.$key.' [starts: '.$arrPerformance['numStarts'].', stops: '.$arrPerformance['numStarts'].']): '. $arrPerformance['description'], $arrPerformance['time'], 'tmp', 'var_dump', false);
 			unset($_SESSION['ls_x']['performanceCheck'][$key]);
 		}
 	}
