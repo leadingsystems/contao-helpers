@@ -7,7 +7,7 @@ if (!isset($_SESSION['ls_helpers'])) {
 }
 
 /**
- * Return an unserialized array or the argument
+ * Writes Variable Values to debug-log-file. Forwarding to lsDebugLog
  *
  * @param       $title                      optional string caption for first row in log message
  * @param       $var                        optional string, variable-value to log
@@ -21,8 +21,12 @@ if (!isset($_SESSION['ls_helpers'])) {
  */
 function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '')
 {
-    trigger_deprecation('LeadingSystems/contao-helpers', '4.0', 'Using "lsErrorLog()" has been 
-        deprecated and will no longer work in Contao 5.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
+    trigger_deprecation('LeadingSystems/contao-helpers', '4.0', 'Using "lsErrorLog()" has been deprecated and will no longer work in Contao 5.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
+
+
+    lsDebugLog($var, 'DURCHGEREICHT', $mode, $blnReplaceUUIDs, $str_logPath, true);
+
+
 }
 
 /*
@@ -44,16 +48,30 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
  * @param       $str_mode                   optional string, default 'regular' oder 'var_dump'
  * @param       $blnReplaceUUIDs            optional boolean, default true
  * @param       $str_logPath                optional string, Pfad zum logfile, default __DIR__.'/log'
+ * @param       $bln_forwarded              optional boolean, true if called from previous lsErrorLog
  *
  */
-function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '') {
+function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = ''
+, $bln_forwarded = false
 
+) {
+echo 'bln_forwarded: ' . $bln_forwarded . '<br>';
     //Get Call-List
     $arr_trace = debug_backtrace();
 
+    //Backward-Compatibility. If forwarded from lsErrorLog take second entry instead of first
+    $int_stackIndex = 0;
+    if ($bln_forwarded) {
+        $int_stackIndex = 1;
+    }
+echo 'int_stackIndex: ' . $int_stackIndex . '<br>';
+
+
     //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
-    $str_file = $arr_trace[0]['file'];
-    $int_line = $arr_trace[0]['line'];
+    $str_file = $arr_trace[$int_stackIndex]['file'];
+echo 'str_file: ' . $str_file . '<br>';
+
+    $int_line = $arr_trace[$int_stackIndex]['line'];
     $str_fileContent = file($str_file);
     $str_callerLine = $str_fileContent[ $int_line - 1 ];
 
@@ -62,7 +80,10 @@ function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regul
     $str_variableName = $arr_match[1];
 
     //Vorherigen Call entnehmen
-    list(, $arr_call) = debug_backtrace(false);
+    //list(, $arr_call) = debug_backtrace(false);
+    $arr_call = $arr_trace[$int_stackIndex + 1];
+#echo 'arr_call: <br>';
+#var_dump($arr_call);
     $str_callerFunction = $arr_call['function'];
     $str_callerClass = $arr_call['class'];
 
