@@ -6,7 +6,6 @@ if (!isset($_SESSION['ls_helpers'])) {
 	$_SESSION['ls_helpers'] = array();
 }
 
-//22.09.2023, tbu, ls_toggleLogClass entfernt, https://lsboard.de/project/18/task/6112
 
 /*
  * Activate the tmp log class like so: http://whatever.de?ls_toggleLogClass=on&ls_useLogClasses=tmp
@@ -21,8 +20,6 @@ if (!isset($_SESSION['ls_helpers'])) {
  * parameters 'ls_toggleLogClass' and 'ls_useLogClasses' it is possible to activate
  * logging for specific log classes (see ls_toggleLogClass()). By default, logging
  * is deactivated, except for the logClass 'perm' which will always be logged.
- *
- * 22.09.2023, umbau/vereinheitlichung der Logge mit lsErrorlog. 25.09.2023, umbenannt zu lsDebugLog
  *
  * @param       $var_variableOrString       string oder variable die zu loggen ist
  * @param       $str_comment                optional string, zusätzlicher Text für die erste Titelzeile
