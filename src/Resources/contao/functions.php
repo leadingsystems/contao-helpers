@@ -48,35 +48,7 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
  */
 function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '') {
 
-echo 'Parameter str_logPath: ' . $str_logPath . '<br>';
-    #echo 'test545';
-#exit;
-/*
-$strLogsDir = null;
-
-#echo '$myvar: ' . $myvar . '<br>';
-#var_dump($myvar);
-
-echo 'strLogsDir: ' . $strLogsDir . '<br>';
-#echo 'container: ' . $container . '<br>';
-
-//if (($container = System::getContainer()) !== null)
-if (($container = \System::getContainer()) !== null)
-{
-    $strLogsDir = $container->getParameter('kernel.logs_dir');
-#echo 'strLogsDir2: ' . $container->getParameter('kernel.logs_dir') . '<br>';
-}
-echo 'strLogsDir2: ' . $strLogsDir . '<br>';
-
-if (!$strLogsDir)
-{
-    $strLogsDir = $container->getParameter('kernel.project_dir') . '/var/logs';
-}
-echo 'strLogsDir3: ' . $strLogsDir . '<br>';
-exit;
-*/
-
-    //04.02.2022, ein versuch den Namen der Variable zu ermitteln, die man an lsDebugLog($var_variableOrString... übergeben hat
+    //Get Call-List
     $arr_trace = debug_backtrace();
 
     //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
@@ -112,26 +84,14 @@ exit;
 
 
 	if (!$str_logPath) {
-#echo 'logpath nicht da<br>';
-		#$str_logPath = __DIR__.'/log';
-
         if (($container = \System::getContainer()) !== null) {
             $str_logPath = $container->getParameter('kernel.logs_dir');
-        #echo 'strLogsDir2: ' . $container->getParameter('kernel.logs_dir') . '<br>';
         }
-#echo '$str_logPath2: ' . $str_logPath . '<br>';
-#$str_logPath = '';
         if (!$str_logPath) {
             $str_logPath = $container->getParameter('kernel.project_dir') . '/var/logs';
-#echo 'aus project_dir holen<br>';
         }
-echo '$str_logPath3: ' . $str_logPath . '<br>';
 	}
-#else {
-#echo 'Eigener Pfad übergeben: ' . $str_logPath . '<br>';
-#}
-#exit;
-	
+
 	if ($blnReplaceUUIDs) {
 		$var_variableOrString = replaceUUIDsInErrorLog($var_variableOrString);
 	}
@@ -168,13 +128,8 @@ echo '$str_logPath3: ' . $str_logPath . '<br>';
 		if (!file_exists($str_logPath) || !is_dir($str_logPath)) {
 			mkdir($str_logPath);
 		}
-		error_log(
-		    '['.$GLOBALS['lsDebugLog']['testcounter'].'] '
-            .($str_title ? $str_title."\r\n" : '')
-            .$str_errorText ."\r\n", 3, $str_logPath.'/lsDebugLog.log');
+		error_log('['.$GLOBALS['lsDebugLog']['testcounter'].'] '.($str_title ? $str_title."\r\n" : '').$str_errorText ."\r\n", 3, $str_logPath.'/lsDebugLog.log');
 	}
-#echo 'meine message: ' . $str_errorText . '<br>';
-#echo 'ausgabe: ' .$str_logPath.'/lsDebugLog.log\r\n';
 }
 
 
