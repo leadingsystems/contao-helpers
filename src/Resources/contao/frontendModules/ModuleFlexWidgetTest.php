@@ -3,12 +3,17 @@
 namespace LeadingSystems\Helpers;
 
 use Contao\System;
+use Symfony\Component\HttpFoundation\Request;
 
 class ModuleFlexWidgetTest extends \Module
 {
 	public function generate()
 	{
-		if (System::getContainer()->get('merconis.routing.scope')->isBackend()) {
+		if (
+            System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest(
+                System::getContainer()->get('request_stack')->getCurrentRequest() ?? Request::create('')
+            )
+        ) {
 			$objTemplate = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### LS FlexWidget Test ###';
 			return $objTemplate->parse();
