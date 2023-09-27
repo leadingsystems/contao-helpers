@@ -19,12 +19,12 @@ if (!isset($_SESSION['ls_helpers'])) {
  * @param       $blnReplaceUUIDs            optional boolean, default true
  * @param       $str_logPath                optional string, path to logfile, default __DIR__.'/log'
  *
- * @deprecated Using deserialize() has been deprecated and will no longer work in Contao 5.0.
+ * @deprecated Using lsErrorLog() has been deprecated and will no longer work in Leading Systems Contao Helpers bundle 3.0.
  *             Use LeadingSystems\Helpers\lsDebugLog() instead.
  */
 function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '')
 {
-    trigger_deprecation('LeadingSystems/contao-helpers', '4.0', 'Using "lsErrorLog()" has been deprecated and will no longer work in Contao 5.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
+    trigger_deprecation('LeadingSystems/contao-helpers', '2.0.7', 'Using "lsErrorLog()" has been deprecated and will no longer work in Leading Systems Contao Helpers bundle 3.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
 
     if (
 			!$logClass
@@ -48,7 +48,7 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
 		}
 	}
 
-    lsDebugLog($var, 'DURCHGEREICHT', $mode, $blnReplaceUUIDs, $str_logPath, true);
+    lsDebugLog($var, $title, $mode, $blnReplaceUUIDs, $str_logPath, true);
 }
 
 /*
