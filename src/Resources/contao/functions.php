@@ -25,7 +25,6 @@ if (!isset($_SESSION['ls_helpers'])) {
 function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '')
 {
     trigger_deprecation('LeadingSystems/contao-helpers', '4.0', 'Using "lsErrorLog()" has been deprecated and will no longer work in Contao 5.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
-echo 'lsErrorLog: logClass: ' . $logClass . '<br>';
 
     if (
 			!$logClass
@@ -37,7 +36,6 @@ echo 'lsErrorLog: logClass: ' . $logClass . '<br>';
 					)
 			)
 	) {
-echo 'lsErrorLog: Abbruch1<br>';
 		return;
 	}
 
@@ -46,14 +44,11 @@ echo 'lsErrorLog: Abbruch1<br>';
 				!in_array($logClass, $_SESSION['ls_helpers']['arr_activatedLogClasses'])
 			&&	!in_array('all', $_SESSION['ls_helpers']['arr_activatedLogClasses'])
 		) {
-echo 'lsErrorLog: Abbruch2<br>';
 			return;
 		}
 	}
 
     lsDebugLog($var, 'DURCHGEREICHT', $mode, $blnReplaceUUIDs, $str_logPath, true);
-
-
 }
 
 /*
@@ -78,11 +73,8 @@ echo 'lsErrorLog: Abbruch2<br>';
  * @param       $bln_forwarded              optional boolean, true if called from previous lsErrorLog
  *
  */
-function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = ''
-, $bln_forwarded = false
+function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false) {
 
-) {
-echo 'bln_forwarded: ' . $bln_forwarded . '<br>';
     //Get Call-List
     $arr_allTraces = debug_backtrace();
 
@@ -91,12 +83,9 @@ echo 'bln_forwarded: ' . $bln_forwarded . '<br>';
     if ($bln_forwarded) {
         $int_stackIndex = 1;
     }
-echo 'int_stackIndex: ' . $int_stackIndex . '<br>';
-
 
     //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
     $str_file = $arr_allTraces[$int_stackIndex]['file'];
-echo 'str_file: ' . $str_file . '<br>';
 
     $int_line = $arr_allTraces[$int_stackIndex]['line'];
     $str_fileContent = file($str_file);
@@ -109,8 +98,7 @@ echo 'str_file: ' . $str_file . '<br>';
     //Vorherigen Call entnehmen
     //list(, $arr_trace) = debug_backtrace(false);
     $arr_trace = $arr_allTraces[$int_stackIndex + 1];
-#echo 'arr_call: <br>';
-#var_dump($arr_trace);
+
     $str_callerFunction = $arr_trace['function'];
     $str_callerClass = $arr_trace['class'];
 
