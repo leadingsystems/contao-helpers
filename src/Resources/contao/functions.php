@@ -11,7 +11,10 @@ if (!isset($_SESSION['ls_helpers'])) {
  *
  * @param       $title                      optional string caption for first row in log message
  * @param       $var                        optional string, variable-value to log
- * @param       $logClass                   optional string, 'perm'
+ * @param       $logClass                   optional string, if empty then cancel
+ *                                                          if 'perm' then continue execution
+ *                                                          if anything else then check
+ *                                                              if class or 'all' contained in arr_activatedLogClasses then continue
  * @param       $mode                       optional string, default 'regular' or 'var_dump'
  * @param       $blnReplaceUUIDs            optional boolean, default true
  * @param       $str_logPath                optional string, path to logfile, default __DIR__.'/log'
