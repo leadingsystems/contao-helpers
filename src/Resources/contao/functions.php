@@ -22,7 +22,31 @@ if (!isset($_SESSION['ls_helpers'])) {
 function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '')
 {
     trigger_deprecation('LeadingSystems/contao-helpers', '4.0', 'Using "lsErrorLog()" has been deprecated and will no longer work in Contao 5.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
+echo 'lsErrorLog: logClass: ' . $logClass . '<br>';
 
+    if (
+			!$logClass
+		||	(
+					$logClass !== 'perm'
+				&&	(
+							!isset($_SESSION['ls_helpers']['arr_activatedLogClasses'])
+						||	!is_array($_SESSION['ls_helpers']['arr_activatedLogClasses'])
+					)
+			)
+	) {
+echo 'lsErrorLog: Abbruch1<br>';
+		return;
+	}
+
+	if ($logClass !== 'perm') {
+		if (
+				!in_array($logClass, $_SESSION['ls_helpers']['arr_activatedLogClasses'])
+			&&	!in_array('all', $_SESSION['ls_helpers']['arr_activatedLogClasses'])
+		) {
+echo 'lsErrorLog: Abbruch2<br>';
+			return;
+		}
+	}
 
     lsDebugLog($var, 'DURCHGEREICHT', $mode, $blnReplaceUUIDs, $str_logPath, true);
 
