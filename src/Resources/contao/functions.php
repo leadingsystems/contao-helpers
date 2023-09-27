@@ -57,7 +57,7 @@ function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regul
 ) {
 echo 'bln_forwarded: ' . $bln_forwarded . '<br>';
     //Get Call-List
-    $arr_trace = debug_backtrace();
+    $arr_allTraces = debug_backtrace();
 
     //Backward-Compatibility. If forwarded from lsErrorLog take second entry instead of first
     $int_stackIndex = 0;
@@ -68,10 +68,10 @@ echo 'int_stackIndex: ' . $int_stackIndex . '<br>';
 
 
     //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
-    $str_file = $arr_trace[$int_stackIndex]['file'];
+    $str_file = $arr_allTraces[$int_stackIndex]['file'];
 echo 'str_file: ' . $str_file . '<br>';
 
-    $int_line = $arr_trace[$int_stackIndex]['line'];
+    $int_line = $arr_allTraces[$int_stackIndex]['line'];
     $str_fileContent = file($str_file);
     $str_callerLine = $str_fileContent[ $int_line - 1 ];
 
@@ -80,12 +80,12 @@ echo 'str_file: ' . $str_file . '<br>';
     $str_variableName = $arr_match[1];
 
     //Vorherigen Call entnehmen
-    //list(, $arr_call) = debug_backtrace(false);
-    $arr_call = $arr_trace[$int_stackIndex + 1];
+    //list(, $arr_trace) = debug_backtrace(false);
+    $arr_trace = $arr_allTraces[$int_stackIndex + 1];
 #echo 'arr_call: <br>';
-#var_dump($arr_call);
-    $str_callerFunction = $arr_call['function'];
-    $str_callerClass = $arr_call['class'];
+#var_dump($arr_trace);
+    $str_callerFunction = $arr_trace['function'];
+    $str_callerClass = $arr_trace['class'];
 
     //Erste Titelzeile zusammenbauen
     $str_title = ($str_callerClass ? $str_callerClass . '::' : '')  . $str_callerFunction . ': LINE ' . $int_line;
