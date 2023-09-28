@@ -341,7 +341,7 @@ class ls_helpers_controller extends \Controller {
 	 */
 	public static function getUrl($blnEncode = true, $removeKeys = array(), $keepKeys = array())
 	{
-		$url = ampersand(\Environment::get('request'), $blnEncode);
+		$url = \Contao\StringUtil::ampersand(\Environment::get('request'), $blnEncode);
 
 		if (is_array($removeKeys)) {
 			foreach ($removeKeys as $v) {
