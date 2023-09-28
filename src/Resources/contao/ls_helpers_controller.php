@@ -350,7 +350,7 @@ class ls_helpers_controller extends \Controller {
 		} else if ($removeKeys == 'all') {
 			$url = preg_replace('/\?.*$/siU', '', $url);
 
-			array_insert($keepKeys, 0, array('do'));
+			\Contao\ArrayUtil::arrayInsert($keepKeys, 0, array('do'));
 			$count = 0;
 			foreach ($keepKeys as $key) {
 				$url = $url . (!$count ? '?' : '&') . $key . '=' . \Input::get($key);

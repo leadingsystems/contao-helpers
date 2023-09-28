@@ -10,7 +10,7 @@ $GLOBALS['FE_MOD']['ls_helpers'] = array(
 	'ModuleFlexWidgetTest' => 'LeadingSystems\Helpers\ModuleFlexWidgetTest',
 );
 
-array_insert(
+\Contao\ArrayUtil::arrayInsert(
     $GLOBALS['TL_CTE']['texts'],
     array_search('html', array_keys($GLOBALS['TL_CTE']['texts'])) + 1,
     [
