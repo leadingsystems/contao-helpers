@@ -47,7 +47,7 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
  * @param       $bln_forwarded              optional boolean, true if called from previous lsErrorLog
  *
  */
-function lsDebugLog($var_variableOrString, $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false) {
+function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false) {
 
     //Get Call-List
     $arr_allTraces = debug_backtrace();
