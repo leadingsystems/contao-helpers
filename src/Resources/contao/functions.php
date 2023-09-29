@@ -36,24 +36,14 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
 }
 
 /*
- * Activate the tmp log class like so: http://whatever.de?ls_toggleLogClass=on&ls_useLogClasses=tmp
- * or multiple log classes: http://whatever.de?ls_toggleLogClass=on&ls_useLogClasses=tmp,test1,test2
- * or all log classes: http://whatever.de?ls_toggleLogClass=on
- * 
- * Turn of a single log class like this: http://whatever.de?ls_toggleLogClass=off&ls_useLogClasses=tmp
- * or multiple log classes: http://whatever.de?ls_toggleLogClass=off&ls_useLogClasses=tmp,test1,test2
- * or (for all active log classes): http://whatever.de?ls_toggleLogClass=off
- * 
- * This function writes well-formatted messages to the error log. Using the get
- * parameters 'ls_toggleLogClass' and 'ls_useLogClasses' it is possible to activate
- * logging for specific log classes (see ls_toggleLogClass()). By default, logging
- * is deactivated, except for the logClass 'perm' which will always be logged.
+ * This function writes well-formatted messages to the error log.
+ * Calling function is detected by debug_backtrace and printed to first row
  *
- * @param       $var_variableOrString       string oder variable die zu loggen ist
- * @param       $str_comment                optional string, zusätzlicher Text für die erste Titelzeile
- * @param       $str_mode                   optional string, default 'regular' oder 'var_dump'
+ * @param       $var_variableOrString       string or variable to log
+ * @param       $str_comment                optional string, additional text for first row
+ * @param       $str_mode                   optional string, default 'regular' or 'var_dump'
  * @param       $blnReplaceUUIDs            optional boolean, default true
- * @param       $str_logPath                optional string, Pfad zum logfile, default __DIR__.'/log'
+ * @param       $str_logPath                optional string, path to logfile, default from symfony
  * @param       $bln_forwarded              optional boolean, true if called from previous lsErrorLog
  *
  */
