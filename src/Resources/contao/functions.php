@@ -13,10 +13,7 @@ if (!isset($_SESSION['ls_helpers'])) {
  *
  * @param       $title                      optional string caption for first row in log message
  * @param       $var                        optional string, variable-value to log
- * @param       $logClass                   optional string, if empty then cancel
- *                                                          if 'perm' then continue execution
- *                                                          if anything else then check
- *                                                              if class or 'all' contained in arr_activatedLogClasses then continue
+ * @param       $logClass                   optional string, cancel if not '' or not 'perm'
  * @param       $mode                       optional string, default 'regular' or 'var_dump'
  * @param       $blnReplaceUUIDs            optional boolean, default true
  * @param       $str_logPath                optional string, path to logfile, default __DIR__.'/log'
@@ -28,29 +25,14 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
 {
     trigger_deprecation('LeadingSystems/contao-helpers', '2.0.7', 'Using "lsErrorLog()" has been deprecated and will no longer work in Leading Systems Contao Helpers bundle 3.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
 
-    if (
-        !$logClass
-        || (
-            $logClass !== 'perm'
-            && (
-                !isset($_SESSION['ls_helpers']['arr_activatedLogClasses'])
-                || !is_array($_SESSION['ls_helpers']['arr_activatedLogClasses'])
-            )
-        )
-    ) {
-        return;
+    if ($logClass == 'perm' || !$logClass)
+    {
+      lsDebugLog($var, $title, $mode, $blnReplaceUUIDs, $str_logPath, true);
     }
-
-    if ($logClass !== 'perm') {
-        if (
-            !in_array($logClass, $_SESSION['ls_helpers']['arr_activatedLogClasses'])
-            && !in_array('all', $_SESSION['ls_helpers']['arr_activatedLogClasses'])
-        ) {
-            return;
-        }
+    else
+    {
+      return;
     }
-
-    lsDebugLog($var, $title, $mode, $blnReplaceUUIDs, $str_logPath, true);
 }
 
 /*
