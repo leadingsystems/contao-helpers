@@ -11,17 +11,19 @@ if (!isset($_SESSION['ls_helpers'])) {
 /**
  * Writes Variable Values to debug-log-file. Forwarding to lsDebugLog
  *
- * @param       $title                      optional string caption for first row in log message
- * @param       $var                        optional string, variable-value to log
- * @param       $logClass                   optional string, cancel if not '' or not 'perm'
- * @param       $mode                       optional string, default 'regular' or 'var_dump'
- * @param       $blnReplaceUUIDs            optional boolean, default true
- * @param       $str_logPath                optional string, path to logfile, default __DIR__.'/log'
+ * @param string  $title              optional caption for first row in log message
+ * @param mixed   $var                optional variable-value to log
+ * @param string  $logClass           optional cancel if not '' or not 'perm'
+ * @param string  $mode               optional default 'regular' or 'var_dump'
+ * @param boolean $blnReplaceUUIDs    optional default true
+ * @param string  $str_logPath        optional path to logfile, default __DIR__.'/log'
+ *
+ * @return void
  *
  * @deprecated Using lsErrorLog() has been deprecated and will no longer work in Leading Systems Contao Helpers bundle 3.0.
  *             Use LeadingSystems\Helpers\lsDebugLog() instead.
  */
-function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $blnReplaceUUIDs = true, $str_logPath = '')
+function lsErrorLog($title = '', $var = '', $logClass = '', $mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '')
 {
     trigger_deprecation('LeadingSystems/contao-helpers', '2.0.7', 'Using "lsErrorLog()" has been deprecated and will no longer work in Leading Systems Contao Helpers bundle 3.0. Use "LeadingSystems\Helpers\lsDebugLog()" instead.');
 
@@ -35,20 +37,21 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode='regular', $bl
     }
 }
 
-/*
- * This function writes well-formatted messages to the error log.
+/**
+ * This function writes well-formatted messages to the debug log.
  * Calling function is detected by debug_backtrace and printed to first row
  *
- * @param       $var_variableOrString       string or variable to log
- * @param       $str_comment                optional string, additional text for first row
- * @param       $str_mode                   optional string, default 'regular' or 'var_dump'
- * @param       $blnReplaceUUIDs            optional boolean, default true
- * @param       $str_logPath                optional string, path to logfile, default from symfony
- * @param       $bln_forwarded              optional boolean, true if called from previous lsErrorLog
+ * @param mixed   $var_variableOrString    optional string or variable to log
+ * @param string  $str_comment             optional additional text for first row
+ * @param string  $str_mode                optional default 'regular' or 'var_dump'
+ * @param boolean $blnReplaceUUIDs         optional default true
+ * @param string  $str_logPath             optional path to logfile, default from symfony
+ * @param string  $bln_forwarded           optional true if called from previous lsErrorLog
  *
+ * @return void
  */
-function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false) {
-
+function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false)
+{
     //Get Call-List
     $arr_allTraces = debug_backtrace();
 
@@ -58,40 +61,38 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
         $int_stackIndex = 1;
     }
 
-    //Datei, Zeile und den dort enthaltenen Logging-Aufruf holen
+    //Get file, line and the logging call contained there
     $str_file = $arr_allTraces[$int_stackIndex]['file'];
 
     $int_line = $arr_allTraces[$int_stackIndex]['line'];
     $str_fileContent = file($str_file);
     $str_callerLine = $str_fileContent[ $int_line - 1 ];
 
-    //Matcht Variablennamen und auch Keys z.B. $myvar oder $myvar['caption']
+    //Matches variable names and also keys e.g. $myvar or $myvar['caption']
     preg_match( "#(\\$\w?\\b.+?)(,|\))#", $str_callerLine, $arr_match);
-    $str_variableName = $arr_match[1];
+    $str_variableName = ($arr_match[1] ?? '');
 
-    //Vorherigen Call entnehmen
+    //Take previous call
     //list(, $arr_trace) = debug_backtrace(false);
     $arr_trace = $arr_allTraces[$int_stackIndex + 1];
 
     $str_callerFunction = $arr_trace['function'];
-    $str_callerClass = $arr_trace['class'];
+    $str_callerClass = ($arr_trace['class'] ?? '');
 
-    //Erste Titelzeile zusammenbauen
+    //Assemble first title line
     $str_title = ($str_callerClass ? $str_callerClass . '::' : '')  . $str_callerFunction . ': LINE ' . $int_line;
-
 
     if ($str_variableName == '' && is_string($var_variableOrString)) {
         //keine Variable zum ersten Parameter $var_variableOrString gefunden
         $str_title .= ' TEXT:';
 
     } else {
-        //Parameter $var_variableOrString ist eine bekannte Variable
+        //Parameter $var_variableOrString is a known variable
         $str_title .= ' VAR: ' . $str_variableName;
     }
 
-    //Kommentar anhängen, sofern als zweiten Parameter übergeben
+    //Append comment if passed as second parameter
     $str_title .= ($str_comment ? ' - '.$str_comment : '');
-
 
     if (!$str_logPath) {
         if (($container = System::getContainer()) !== null) {
@@ -141,8 +142,6 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
         error_log('['.$GLOBALS['lsDebugLog']['testcounter'].'] '.($str_title ? $str_title."\r\n" : '').$str_errorText ."\r\n", 3, $str_logPath.'/lsDebugLog.log');
     }
 }
-
-
 
 function replaceUUIDsInErrorLog($var) {
     /*
