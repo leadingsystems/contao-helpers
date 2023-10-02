@@ -1,6 +1,9 @@
 <?php
 namespace LeadingSystems\Helpers;
 
+use Contao\ArrayUtil;
+use Contao\StringUtil;
+
 class ls_helpers_controller extends \Controller {
 	protected static $arrStaticObjects = array();
 
@@ -341,7 +344,7 @@ class ls_helpers_controller extends \Controller {
 	 */
 	public static function getUrl($blnEncode = true, $removeKeys = array(), $keepKeys = array())
 	{
-		$url = \Contao\StringUtil::ampersand(\Environment::get('request'), $blnEncode);
+		$url = StringUtil::ampersand(\Environment::get('request'), $blnEncode);
 
 		if (is_array($removeKeys)) {
 			foreach ($removeKeys as $v) {
@@ -350,7 +353,7 @@ class ls_helpers_controller extends \Controller {
 		} else if ($removeKeys == 'all') {
 			$url = preg_replace('/\?.*$/siU', '', $url);
 
-			\Contao\ArrayUtil::arrayInsert($keepKeys, 0, array('do'));
+			ArrayUtil::arrayInsert($keepKeys, 0, array('do'));
 			$count = 0;
 			foreach ($keepKeys as $key) {
 				$url = $url . (!$count ? '?' : '&') . $key . '=' . \Input::get($key);
