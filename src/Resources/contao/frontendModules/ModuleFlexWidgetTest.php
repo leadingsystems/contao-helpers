@@ -3,7 +3,6 @@
 namespace LeadingSystems\Helpers;
 
 use Contao\System;
-use Symfony\Component\HttpFoundation\Request;
 
 class ModuleFlexWidgetTest extends \Module
 {
