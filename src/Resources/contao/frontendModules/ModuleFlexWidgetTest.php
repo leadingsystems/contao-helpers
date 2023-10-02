@@ -2,11 +2,17 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\System;
+
 class ModuleFlexWidgetTest extends \Module
 {
 	public function generate()
 	{
-		if (TL_MODE == 'BE') {
+        $container = System::getContainer();
+        $request = $container->get('request_stack')->getCurrentRequest();
+
+        if($request && $container->get('contao.routing.scope_matcher')->isBackendRequest($request))
+        {
 			$objTemplate = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### LS FlexWidget Test ###';
 			return $objTemplate->parse();
