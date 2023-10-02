@@ -2,13 +2,15 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\ArrayUtil;
+
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('LeadingSystems\Helpers\ls_helpers_customInserttags', 'customInserttags');
 
 $GLOBALS['FE_MOD']['ls_helpers'] = array(
 	'ModuleFlexWidgetTest' => 'LeadingSystems\Helpers\ModuleFlexWidgetTest',
 );
 
-array_insert(
+ArrayUtil::arrayInsert(
     $GLOBALS['TL_CTE']['texts'],
     array_search('html', array_keys($GLOBALS['TL_CTE']['texts'])) + 1,
     [
