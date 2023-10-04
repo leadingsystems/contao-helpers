@@ -73,7 +73,6 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
     $str_variableName = ($arr_match[1] ?? '');
 
     //Take previous call
-    //list(, $arr_trace) = debug_backtrace(false);
     $arr_trace = $arr_allTraces[$int_stackIndex + 1];
 
     $str_callerFunction = $arr_trace['function'];
