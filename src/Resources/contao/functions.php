@@ -82,7 +82,7 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
     $str_title = ($str_callerClass ? $str_callerClass . '::' : '')  . $str_callerFunction . ': LINE ' . $int_line;
 
     if ($str_variableName == '' && is_string($var_variableOrString)) {
-        //keine Variable zum ersten Parameter $var_variableOrString gefunden
+        //no variable name found for first parameter $var_variableOrString
         $str_title .= ' TEXT:';
 
     } else {
