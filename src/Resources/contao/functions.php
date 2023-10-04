@@ -70,13 +70,13 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
 
     //Matches variable names and also keys e.g. $myvar or $myvar['caption']
     preg_match( "#(\\$\w?\\b.+?)(,|\))#", $str_callerLine, $arr_match);
-    $str_variableName = ($arr_match[1] ?? '');
+    $str_variableName = (isset($arr_match[1])) ? $arr_match[1] : '';
 
     //Take previous call
     $arr_trace = $arr_allTraces[$int_stackIndex + 1];
 
     $str_callerFunction = $arr_trace['function'];
-    $str_callerClass = ($arr_trace['class'] ?? '');
+    $str_callerClass = (isset($arr_trace['class'])) ? $arr_trace['class'] : '';
 
     //Assemble first title line
     $str_title = ($str_callerClass ? $str_callerClass . '::' : '')  . $str_callerFunction . ': LINE ' . $int_line;
