@@ -65,7 +65,6 @@ class ModuleFlexWidgetTest extends \Module
 				!$obj_tfw_firstname->bln_hasErrors
 				&& !$obj_tfw_lastname->bln_hasErrors
 			) {
-				lsErrorLog('Hi ' . $obj_tfw_firstname->getValue() . ' ' . $obj_tfw_lastname->getValue(), '', 'perm');
 				$_SESSION['leadingSystems']['test']['tfw_firstname'] = $obj_tfw_firstname->getValue();
 				$_SESSION['leadingSystems']['test']['tfw_lastname'] = $obj_tfw_lastname->getValue();
 				\Controller::reload();

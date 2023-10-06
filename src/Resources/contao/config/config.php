@@ -4,8 +4,6 @@ namespace LeadingSystems\Helpers;
 
 use Contao\ArrayUtil;
 
-ls_toggleLogClass();
-
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = array('LeadingSystems\Helpers\ls_helpers_customInserttags', 'customInserttags');
 
 $GLOBALS['FE_MOD']['ls_helpers'] = array(
