@@ -2,11 +2,17 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\System;
+
 class ModuleFlexWidgetTest extends \Module
 {
 	public function generate()
 	{
-		if (TL_MODE == 'BE') {
+        $container = System::getContainer();
+        $request = $container->get('request_stack')->getCurrentRequest();
+
+        if($request && $container->get('contao.routing.scope_matcher')->isBackendRequest($request))
+        {
 			$objTemplate = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### LS FlexWidget Test ###';
 			return $objTemplate->parse();
@@ -59,7 +65,6 @@ class ModuleFlexWidgetTest extends \Module
 				!$obj_tfw_firstname->bln_hasErrors
 				&& !$obj_tfw_lastname->bln_hasErrors
 			) {
-				lsErrorLog('Hi ' . $obj_tfw_firstname->getValue() . ' ' . $obj_tfw_lastname->getValue(), '', 'perm');
 				$_SESSION['leadingSystems']['test']['tfw_firstname'] = $obj_tfw_firstname->getValue();
 				$_SESSION['leadingSystems']['test']['tfw_lastname'] = $obj_tfw_lastname->getValue();
 				\Controller::reload();
