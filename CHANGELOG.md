@@ -1,8 +1,10 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
-### 2.0.8 (2023-09-22)
+### 2.1.0 (2023-10-06)
  * Fix some issues for Contao 5
+ * Implement lsDebugLog
+ * Removed Contao 4.9 compatibility
 
 ### 2.0.7 (2022-12-15)
 
