@@ -4,7 +4,7 @@ namespace LeadingSystems\HelpersBundle\EventListener;
 
 
 
-class ReplaceInsertTags {
+class ReplaceInsertTagsListener {
 
 	public function customInsertTags(string $insertTag): string
     {

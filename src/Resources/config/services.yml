@@ -5,7 +5,7 @@ services:
     autoconfigure: true
     public: false
 
-  LeadingSystems\HelpersBundle\EventListener\ReplaceInsertTags:
+  LeadingSystems\HelpersBundle\EventListener\ReplaceInsertTagsListener:
     arguments:
       - '%kernel.project_dir%'
     tags:
