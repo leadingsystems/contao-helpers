@@ -1,0 +1,12 @@
+services:
+
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  LeadingSystems\HelpersBundle\EventListener\ReplaceInsertTags:
+    arguments:
+      - '%kernel.project_dir%'
+    tags:
+      - { name: contao.hook, hook: replaceInsertTags, method: customInsertTags }
