@@ -6,7 +6,5 @@ services:
     public: false
 
   LeadingSystems\HelpersBundle\EventListener\ReplaceInsertTagsListener:
-    arguments:
-      - '%kernel.project_dir%'
     tags:
       - { name: contao.hook, hook: replaceInsertTags, method: customInsertTags }
