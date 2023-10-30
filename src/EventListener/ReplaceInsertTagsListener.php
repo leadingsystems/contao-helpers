@@ -1,14 +1,14 @@
 <?php
 
-namespace LeadingSystems\Helpers;
+namespace LeadingSystems\HelpersBundle\EventListener;
 
-class ls_helpers_customInserttags extends \Controller {
-	public function __construct() {
-		parent::__construct();
-	}
 
-	public function customInserttags($strTag) {
-		if (!preg_match('/ls_([^:]*)(::(.*))?$/', $strTag, $matches)) {
+
+class ReplaceInsertTagsListener {
+
+	public function customInsertTags(string $insertTag): string
+    {
+		if (!preg_match('/ls_([^:]*)(::(.*))?$/', $insertTag, $matches)) {
 			return false;
 		}
 		$tag = isset($matches[1]) ? $matches[1] : '';
@@ -18,7 +18,7 @@ class ls_helpers_customInserttags extends \Controller {
 			case 'get':
 				return \Input::get($params);
 				break;
-			
+
 			case 'post':
 				return \Input::post($params);
 				break;
