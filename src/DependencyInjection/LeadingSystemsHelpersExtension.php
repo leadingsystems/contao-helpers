@@ -7,6 +7,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
+/**
+ * Configures the bundle.
+ *
+ * @author Leading Systems GmbH
+ */
 class LeadingSystemsHelpersExtension extends Extension
 {
 	/**
