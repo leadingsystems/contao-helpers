@@ -1,7 +1,7 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
-### 2.1.1 (nry: 2023-10-30)
+### 2.1.1 (2023-12-12)
  * improve custom inserttags
 
 ### 2.1.0 (2023-10-06)
