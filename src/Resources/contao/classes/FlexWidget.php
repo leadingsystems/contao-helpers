@@ -2,6 +2,8 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\FrontendTemplate;
+use Contao\Input;
 use Symfony\Component\HttpFoundation\Request;
 
 class FlexWidget
@@ -229,13 +231,13 @@ class FlexWidget
                 !$this->str_allowedRequestMethod
                 || $this->str_allowedRequestMethod === 'post'
             )
-            && \Input::post($this->str_name) !== null
+            && Input::post($this->str_name) !== null
         ) {
             /*
              * Get the value from POST data if there's either no restriction regarding the allowed request methods
              * or the POST method is set explicitly
              */
-            $this->var_value = \Input::post($this->str_name);
+            $this->var_value = Input::post($this->str_name);
             $this->bln_receivedData = true;
             return;
         }
@@ -245,13 +247,13 @@ class FlexWidget
                 !$this->str_allowedRequestMethod
                 || $this->str_allowedRequestMethod === 'get'
             )
-            && \Input::get($this->str_name) !== null
+            && Input::get($this->str_name) !== null
         ) {
             /*
              * Get the value from GET data if there's either no restriction regarding the allowed request methods
              * or the GET method is set explicitly
              */
-            $this->var_value = \Input::get($this->str_name);
+            $this->var_value = Input::get($this->str_name);
             $this->bln_receivedData = true;
             return;
         }
@@ -302,7 +304,7 @@ class FlexWidget
 			throw new \Exception('Flex widget cannot be parsed because no id has been set yet.');
 		}
 
-		$obj_template = new \FrontendTemplate($this->str_template);
+		$obj_template = new FrontendTemplate($this->str_template);
 		$obj_template->__set('str_name', $this->str_name);
 		$obj_template->__set('str_label', $this->str_label);
 		$obj_template->__set('var_value', $this->var_value);
