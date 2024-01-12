@@ -4,6 +4,8 @@ namespace LeadingSystems\HelpersBundle\EventListener;
 
 
 
+use Contao\Input;
+
 class ReplaceInsertTagsListener {
 
 	public function customInsertTags(string $insertTag): string
@@ -16,11 +18,11 @@ class ReplaceInsertTagsListener {
 
 		switch ($tag) {
 			case 'get':
-				return \Input::get($params);
+				return Input::get($params);
 				break;
 
 			case 'post':
-				return \Input::post($params);
+				return Input::post($params);
 				break;
 
 			case 'text':

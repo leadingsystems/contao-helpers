@@ -2,6 +2,8 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\Database;
+
 class ls_helpers_segmentizer {
 	protected $str_segmentationToken = null;
 	protected $str_info = null;
@@ -86,7 +88,7 @@ class ls_helpers_segmentizer {
 	}
 
 	protected function read() {
-		$obj_dbres = \Database::getInstance()
+		$obj_dbres = Database::getInstance()
 			->prepare("
 				SELECT		*
 				FROM		`tl_ls_helpers_segmentizer`
@@ -108,7 +110,7 @@ class ls_helpers_segmentizer {
 
 	protected function write() {
 		if ($this->bln_isNew) {
-			$obj_dbquery = \Database::getInstance()
+			$obj_dbquery = Database::getInstance()
 				->prepare("
 					INSERT INTO 	`tl_ls_helpers_segmentizer`
 					SET				`segmentationToken` = ?,
@@ -131,7 +133,7 @@ class ls_helpers_segmentizer {
 					$this->bln_nextCallIsNewTurn ? '1' : ''
 				);
 		} else {
-			$obj_dbquery = \Database::getInstance()
+			$obj_dbquery = Database::getInstance()
 				->prepare("
 					UPDATE 			`tl_ls_helpers_segmentizer`
 					SET				`info` = ?,
@@ -158,7 +160,7 @@ class ls_helpers_segmentizer {
 	}
 
 	protected function clean() {
-		$obj_dbquery = \Database::getInstance()
+		$obj_dbquery = Database::getInstance()
 			->prepare("
 				DELETE FROM		`tl_ls_helpers_segmentizer`
 				WHERE			`tstampExpiration` < ?
