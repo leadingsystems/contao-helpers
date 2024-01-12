@@ -2,14 +2,19 @@
 namespace LeadingSystems\Helpers;
 
 use Contao\ArrayUtil;
+use Contao\Controller;
+use Contao\Environment;
+use Contao\FilesModel;
+use Contao\Input;
 use Contao\StringUtil;
+use Contao\Validator;
 
-class ls_helpers_controller extends \Controller {
+class ls_helpers_controller extends Controller {
 	protected static $arrStaticObjects = array();
 
 	/**
 	 * Current object instance (Singleton)
-	 * @var \Input
+	 * @var Input
 	 */
 	protected static $objInstance;
 
@@ -28,7 +33,7 @@ class ls_helpers_controller extends \Controller {
 
 	/**
 	 * Return the current object instance (Singleton)
-	 * @return \Input
+	 * @return Input
 	 */
 	public static function getInstance() {
 		if (!is_object(self::$objInstance))	{
@@ -52,8 +57,8 @@ class ls_helpers_controller extends \Controller {
 	}
 
 	public static function idFromUuid($str_value = '') {
-		if (\Validator::isUuid($str_value)) {
-			$obj_file = \FilesModel::findByUuid($str_value);
+		if (Validator::isUuid($str_value)) {
+			$obj_file = FilesModel::findByUuid($str_value);
 			if ($obj_file === null) {
 				return '';
 			}
@@ -66,12 +71,12 @@ class ls_helpers_controller extends \Controller {
 		if (is_array($str_value)) {
 			return $str_value;
 		}
-		if (\Validator::isUuid($str_value)) {
+		if (Validator::isUuid($str_value)) {
 			return $str_value;
 		}
 
 		if (is_numeric($str_value)) {
-			$obj_file = \FilesModel::findByPk($str_value);
+			$obj_file = FilesModel::findByPk($str_value);
 
 			if ($obj_file === null) {
 				return '';
@@ -344,7 +349,7 @@ class ls_helpers_controller extends \Controller {
 	 */
 	public static function getUrl($blnEncode = true, $removeKeys = array(), $keepKeys = array())
 	{
-		$url = StringUtil::ampersand(\Environment::get('request'), $blnEncode);
+		$url = StringUtil::ampersand(Environment::get('request'), $blnEncode);
 
 		if (is_array($removeKeys)) {
 			foreach ($removeKeys as $v) {
@@ -356,7 +361,7 @@ class ls_helpers_controller extends \Controller {
 			ArrayUtil::arrayInsert($keepKeys, 0, array('do'));
 			$count = 0;
 			foreach ($keepKeys as $key) {
-				$url = $url . (!$count ? '?' : '&') . $key . '=' . \Input::get($key);
+				$url = $url . (!$count ? '?' : '&') . $key . '=' . Input::get($key);
 				$count++;
 			}
 		}

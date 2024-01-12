@@ -2,7 +2,10 @@
 
 namespace LeadingSystems\Helpers;
 
-use System;
+use Contao\Environment;
+use Contao\FilesModel;
+use Contao\System;
+use Contao\Validator;
 
 /**
  * Writes Variable Values to debug-log-file. Forwarding to lsDebugLog
@@ -147,8 +150,8 @@ function replaceUUIDsInErrorLog($var) {
     }
 
     if (!is_array($var)) {
-        if (\Validator::isUuid($var)) {
-            $objFile = \FilesModel::findByUuid($var);
+        if (Validator::isUuid($var)) {
+            $objFile = FilesModel::findByUuid($var);
 
             if ($objFile === null) {
                 $var = 'UUID ==> NULL';
@@ -193,7 +196,7 @@ function performanceCheck($key = null, $startStop = 'start', $description = '') 
         return;
     }
 
-    $session = \System::getContainer()->get('contaoHelpers.session')->getSession();
+    $session = System::getContainer()->get('contaoHelpers.session')->getSession();
     $session_lsx =  $session->get('ls_x', []);
 
 
@@ -224,7 +227,7 @@ function performanceCheck($key = null, $startStop = 'start', $description = '') 
 
 function performanceCheckResults() {
 #	return;
-    $session = \System::getContainer()->get('contaoHelpers.session')->getSession();
+    $session = System::getContainer()->get('contaoHelpers.session')->getSession();
     $session_lsx =  $session->get('ls_x', []);
 
     if (is_array($session_lsx['performanceCheck'])) {
@@ -253,8 +256,8 @@ function ls_div($a, $b) {
 }
 
 function ls_getFilePathFromVariableSources($src) {
-    if (\Validator::isUuid($src)) {
-        $objFile = \FilesModel::findByUuid($src);
+    if (Validator::isUuid($src)) {
+        $objFile = FilesModel::findByUuid($src);
 
         if ($objFile === null) {
             return '';
@@ -262,7 +265,7 @@ function ls_getFilePathFromVariableSources($src) {
 
         $src = $objFile->path;
     } else if (is_numeric($src)) {
-        $objFile = \FilesModel::findByPk($src);
+        $objFile = FilesModel::findByPk($src);
 
         if ($objFile === null) {
             return '';
@@ -486,7 +489,7 @@ function create_arrayCombinations($arr_arrays, $i = 0) {
 
 function getUrlWithoutParameters($var_parameterName = null, $str_url = null) {
     if (!$str_url) {
-        $str_url = \Environment::get('request');
+        $str_url = Environment::get('request');
     }
 
     $arr_url = explode('?', $str_url);
@@ -532,7 +535,7 @@ function removeParameterFromQueryString($str_queryString, $var_parameterName = n
 
 function addQueryParameters($arr_parameters = null, $str_url = null) {
     if (!$str_url) {
-        $str_url = \Environment::get('request');
+        $str_url = Environment::get('request');
     }
 
     if (!is_array($arr_parameters)) {
