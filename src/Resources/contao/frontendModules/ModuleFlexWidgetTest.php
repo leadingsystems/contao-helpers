@@ -29,9 +29,6 @@ class ModuleFlexWidgetTest extends Module
 	{
 		$this->Template = new FrontendTemplate('ls_flexWidget_frontendModuleTest');
 
-        $session = System::getContainer()->get('contaoHelpers.session')->getSession();
-        $session_leadingSystems =  $session->get('leadingSystems', []);
-
 		$obj_tfw_firstname = new FlexWidget(
 			array(
 				'str_uniqueName' => 'tfw_firstname',
@@ -46,7 +43,7 @@ class ModuleFlexWidgetTest extends Module
 				'arr_moreData' => array(
 					'headline' => 'Gib Deinen Vornamen hier ein:'
 				),
-				'var_value' => isset($session_leadingSystems['test']['tfw_firstname']) ? $session_leadingSystems['test']['tfw_firstname'] : ''
+				'var_value' => isset($_SESSION['leadingSystems']['test']['tfw_firstname']) ? $_SESSION['leadingSystems']['test']['tfw_firstname'] : ''
 			)
 		);
 
@@ -64,7 +61,7 @@ class ModuleFlexWidgetTest extends Module
 				'arr_moreData' => array(
 					'headline' => 'Gib Deinen Nachnamen hier ein:'
 				),
-				'var_value' => isset($session_leadingSystems['test']['tfw_lastname']) ? $session_leadingSystems['test']['tfw_lastname'] : ''
+				'var_value' => isset($_SESSION['leadingSystems']['test']['tfw_lastname']) ? $_SESSION['leadingSystems']['test']['tfw_lastname'] : ''
 			)
 		);
 
@@ -73,9 +70,8 @@ class ModuleFlexWidgetTest extends Module
 				!$obj_tfw_firstname->bln_hasErrors
 				&& !$obj_tfw_lastname->bln_hasErrors
 			) {
-                $session_leadingSystems['test']['tfw_firstname'] = $obj_tfw_firstname->getValue();
-                $session_leadingSystems['test']['tfw_lastname'] = $obj_tfw_lastname->getValue();
-                $session->set('leadingSystems', $session_leadingSystems);
+				$_SESSION['leadingSystems']['test']['tfw_firstname'] = $obj_tfw_firstname->getValue();
+				$_SESSION['leadingSystems']['test']['tfw_lastname'] = $obj_tfw_lastname->getValue();
 				Controller::reload();
 			}
 		}
