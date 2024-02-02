@@ -53,7 +53,7 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode = 'regular', $
  *
  * @return void
  */
-function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false)
+function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false, $str_filename = 'lsDebugLog.log')
 {
     //Get Call-List
     $arr_allTraces = debug_backtrace();
@@ -141,7 +141,7 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
         if (!file_exists($str_logPath) || !is_dir($str_logPath)) {
             mkdir($str_logPath);
         }
-        error_log('['.$GLOBALS['lsDebugLog']['testcounter'].'] '.($str_title ? $str_title."\r\n" : '').$str_errorText ."\r\n", 3, $str_logPath.'/lsDebugLog.log');
+        error_log('['.$GLOBALS['lsDebugLog']['testcounter'].'] '.($str_title ? $str_title."\r\n" : '').$str_errorText ."\r\n", 3, $str_logPath.'/'.$str_filename);
     }
 }
 
