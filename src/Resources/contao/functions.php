@@ -7,6 +7,10 @@ use Contao\FilesModel;
 use Contao\System;
 use Contao\Validator;
 
+if (!isset($_SESSION['ls_helpers'])) {
+    $_SESSION['ls_helpers'] = array();
+}
+
 /**
  * Writes Variable Values to debug-log-file. Forwarding to lsDebugLog
  *
@@ -196,12 +200,8 @@ function performanceCheck($key = null, $startStop = 'start', $description = '') 
         return;
     }
 
-    $session = System::getContainer()->get('contaoHelpers.session')->getSession();
-    $session_lsx =  $session->get('ls_x', []);
-
-
-    if (!isset($session_lsx['performanceCheck'][$key])) {
-        $session_lsx['performanceCheck'][$key] = array(
+    if (!isset($_SESSION['ls_x']['performanceCheck'][$key])) {
+        $_SESSION['ls_x']['performanceCheck'][$key] = array(
             'start' => 0,
             'time' => 0,
             'description' => $description,
@@ -212,31 +212,26 @@ function performanceCheck($key = null, $startStop = 'start', $description = '') 
 
     switch ($startStop) {
         case 'start':
-            $session_lsx['performanceCheck'][$key]['start'] = microtime(true);
-            $session_lsx['performanceCheck'][$key]['numStarts']++;
+            $_SESSION['ls_x']['performanceCheck'][$key]['start'] = microtime(true);
+            $_SESSION['ls_x']['performanceCheck'][$key]['numStarts']++;
             break;
 
         case 'stop':
-            $session_lsx['performanceCheck'][$key]['time'] += microtime(true) - $session_lsx['performanceCheck'][$key]['start'];
-            $session_lsx['performanceCheck'][$key]['start'] = 0;
-            $session_lsx['performanceCheck'][$key]['numStops']++;
+            $_SESSION['ls_x']['performanceCheck'][$key]['time'] += microtime(true) - $_SESSION['ls_x']['performanceCheck'][$key]['start'];
+            $_SESSION['ls_x']['performanceCheck'][$key]['start'] = 0;
+            $_SESSION['ls_x']['performanceCheck'][$key]['numStops']++;
             break;
     }
-    $session->set('ls_x', $session_lsx);
 }
 
 function performanceCheckResults() {
 #	return;
-    $session = System::getContainer()->get('contaoHelpers.session')->getSession();
-    $session_lsx =  $session->get('ls_x', []);
-
-    if (is_array($session_lsx['performanceCheck'])) {
-        foreach ($session_lsx['performanceCheck'] as $key => $arrPerformance) {
+    if (is_array($_SESSION['ls_x']['performanceCheck'])) {
+        foreach ($_SESSION['ls_x']['performanceCheck'] as $key => $arrPerformance) {
             lsDebugLog('Performance check ('.$key.' [starts: '.$arrPerformance['numStarts'].', stops: '.$arrPerformance['numStarts'].']): '. $arrPerformance['description'], $arrPerformance['time'], 'tmp', 'var_dump', false);
-            unset($session_lsx['performanceCheck'][$key]);
+            unset($_SESSION['ls_x']['performanceCheck'][$key]);
         }
     }
-    $session->set('ls_x', $session_lsx);
 }
 
 function ls_add($a, $b) {
