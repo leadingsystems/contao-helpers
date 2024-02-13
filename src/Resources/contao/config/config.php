@@ -9,8 +9,8 @@ $GLOBALS['FE_MOD']['ls_helpers'] = array(
 );
 
 /*
- * This passage was only commented out to perform the first run with Contao 5.
- * @toDo Check why the array $GLOBALS['TL_CTE']['texts'] is null
+ * @toDo Remove this Content Element. An LSCE is created as a replacement.
+ * LSBoard Task 6349
  */
 //ArrayUtil::arrayInsert(
 //    $GLOBALS['TL_CTE']['texts'],
