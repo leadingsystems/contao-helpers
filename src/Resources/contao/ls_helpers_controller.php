@@ -22,7 +22,7 @@ class ls_helpers_controller extends Controller {
 	 * Prevent direct instantiation (Singleton)
 	 */
 	protected function __construct() {
-		$this->import('Database');
+		$this->import('Contao\Database');
 		parent::__construct();
 	}
 
