@@ -1,6 +1,6 @@
 {
   "name": "leadingsystems/contao-helpers",
-  "description": "Leading Systems Helpers as a Contao 4 bundle",
+  "description": "Leading Systems Helpers as a Contao bundle",
   "keywords": [
     "contao",
     "leading systems",
@@ -32,7 +32,8 @@
   "extra": {
     "contao-manager-plugin": "LeadingSystems\\HelpersBundle\\ContaoManager\\Plugin",
     "branch-alias": {
-      "dev-master": "2.1.x-dev"
+      "dev-master": "2.1.x-dev",
+      "dev-develop": "2.1.x-dev"
     }
   }
 }

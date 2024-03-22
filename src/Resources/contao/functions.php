@@ -2,7 +2,10 @@
 
 namespace LeadingSystems\Helpers;
 
-use System;
+use Contao\Environment;
+use Contao\FilesModel;
+use Contao\System;
+use Contao\Validator;
 
 if (!isset($_SESSION['ls_helpers'])) {
     $_SESSION['ls_helpers'] = array();
@@ -50,7 +53,7 @@ function lsErrorLog($title = '', $var = '', $logClass = '', $mode = 'regular', $
  *
  * @return void
  */
-function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false)
+function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = 'regular', $blnReplaceUUIDs = true, $str_logPath = '', $bln_forwarded = false, $str_filename = 'lsDebugLog.log')
 {
     //Get Call-List
     $arr_allTraces = debug_backtrace();
@@ -138,7 +141,7 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
         if (!file_exists($str_logPath) || !is_dir($str_logPath)) {
             mkdir($str_logPath);
         }
-        error_log('['.$GLOBALS['lsDebugLog']['testcounter'].'] '.($str_title ? $str_title."\r\n" : '').$str_errorText ."\r\n", 3, $str_logPath.'/lsDebugLog.log');
+        error_log('['.$GLOBALS['lsDebugLog']['testcounter'].'] '.($str_title ? $str_title."\r\n" : '').$str_errorText ."\r\n", 3, $str_logPath.'/'.$str_filename);
     }
 }
 
@@ -151,8 +154,8 @@ function replaceUUIDsInErrorLog($var) {
     }
 
     if (!is_array($var)) {
-        if (\Validator::isUuid($var)) {
-            $objFile = \FilesModel::findByUuid($var);
+        if (Validator::isUuid($var)) {
+            $objFile = FilesModel::findByUuid($var);
 
             if ($objFile === null) {
                 $var = 'UUID ==> NULL';
@@ -248,8 +251,8 @@ function ls_div($a, $b) {
 }
 
 function ls_getFilePathFromVariableSources($src) {
-    if (\Validator::isUuid($src)) {
-        $objFile = \FilesModel::findByUuid($src);
+    if (Validator::isUuid($src)) {
+        $objFile = FilesModel::findByUuid($src);
 
         if ($objFile === null) {
             return '';
@@ -257,7 +260,7 @@ function ls_getFilePathFromVariableSources($src) {
 
         $src = $objFile->path;
     } else if (is_numeric($src)) {
-        $objFile = \FilesModel::findByPk($src);
+        $objFile = FilesModel::findByPk($src);
 
         if ($objFile === null) {
             return '';
@@ -481,7 +484,7 @@ function create_arrayCombinations($arr_arrays, $i = 0) {
 
 function getUrlWithoutParameters($var_parameterName = null, $str_url = null) {
     if (!$str_url) {
-        $str_url = \Environment::get('request');
+        $str_url = Environment::get('request');
     }
 
     $arr_url = explode('?', $str_url);
@@ -527,7 +530,7 @@ function removeParameterFromQueryString($str_queryString, $var_parameterName = n
 
 function addQueryParameters($arr_parameters = null, $str_url = null) {
     if (!$str_url) {
-        $str_url = \Environment::get('request');
+        $str_url = Environment::get('request');
     }
 
     if (!is_array($arr_parameters)) {

@@ -2,9 +2,14 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\BackendTemplate;
+use Contao\Controller;
+use Contao\FrontendTemplate;
+use Contao\Input;
+use Contao\Module;
 use Contao\System;
 
-class ModuleFlexWidgetTest extends \Module
+class ModuleFlexWidgetTest extends Module
 {
 	public function generate()
 	{
@@ -13,7 +18,7 @@ class ModuleFlexWidgetTest extends \Module
 
         if($request && $container->get('contao.routing.scope_matcher')->isBackendRequest($request))
         {
-			$objTemplate = new \BackendTemplate('be_wildcard');
+			$objTemplate = new BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### LS FlexWidget Test ###';
 			return $objTemplate->parse();
 		}
@@ -22,7 +27,7 @@ class ModuleFlexWidgetTest extends \Module
 
 	public function compile()
 	{
-		$this->Template = new \FrontendTemplate('ls_flexWidget_frontendModuleTest');
+		$this->Template = new FrontendTemplate('ls_flexWidget_frontendModuleTest');
 
 		$obj_tfw_firstname = new FlexWidget(
 			array(
@@ -60,14 +65,14 @@ class ModuleFlexWidgetTest extends \Module
 			)
 		);
 
-		if (\Input::post('FORM_SUBMIT') == 'testFlexWidget') {
+		if (Input::post('FORM_SUBMIT') == 'testFlexWidget') {
 			if (
 				!$obj_tfw_firstname->bln_hasErrors
 				&& !$obj_tfw_lastname->bln_hasErrors
 			) {
 				$_SESSION['leadingSystems']['test']['tfw_firstname'] = $obj_tfw_firstname->getValue();
 				$_SESSION['leadingSystems']['test']['tfw_lastname'] = $obj_tfw_lastname->getValue();
-				\Controller::reload();
+				Controller::reload();
 			}
 		}
 
