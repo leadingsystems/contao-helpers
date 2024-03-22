@@ -1,7 +1,7 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
-### 2.1.2 (nry: 2024-02-02)
+### 2.1.2 (2024-03-22)
  * Fix some issues for Contao 5
  * Improve lsDebugLog
 
