@@ -332,7 +332,16 @@ function createMultidimensionalArray($onedimensionalArray = array(), $numRelated
 
         if ($count == $numRelatedElements) {
             if ($key) {
-                $multidimensionalArray[$key] = count($arrTemp) > 1 ? $arrTemp : $arrTemp[0];
+                if (!isset($multidimensionalArray[$key])) {
+                    $multidimensionalArray[$key] = count($arrTemp) > 1 ? $arrTemp : $arrTemp[0];
+                } else {
+                    if (is_array($multidimensionalArray[$key])) {
+                        $multidimensionalArray[$key] = array_merge($multidimensionalArray[$key], $arrTemp);
+                    } else {
+                        $multidimensionalArray[$key] = array_merge([$multidimensionalArray[$key]], $arrTemp);
+                    }
+                    $multidimensionalArray[$key] = array_unique($multidimensionalArray[$key]);
+                }
             } else {
                 $multidimensionalArray[] = count($arrTemp) > 1 ? $arrTemp : $arrTemp[0];
             }
