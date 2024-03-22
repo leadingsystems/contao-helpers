@@ -20,6 +20,6 @@ $GLOBALS['FE_MOD']['ls_helpers'] = array(
 //        'htmlWrapperStop' => 'LeadingSystems\Helpers\ContentHtmlWrapperStop',
 //    ]
 //);
-
-$GLOBALS['TL_WRAPPERS']['start'][] = 'htmlWrapperStart';
-$GLOBALS['TL_WRAPPERS']['stop'][] = 'htmlWrapperStop';
+//
+//$GLOBALS['TL_WRAPPERS']['start'][] = 'htmlWrapperStart';
+//$GLOBALS['TL_WRAPPERS']['stop'][] = 'htmlWrapperStop';

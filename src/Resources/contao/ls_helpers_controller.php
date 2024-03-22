@@ -42,20 +42,6 @@ class ls_helpers_controller extends Controller {
 		return self::$objInstance;
 	}
 
-	/*
-	 * Implementing the importStatic method so that we
-	 * can use it as a fallback for Contao < 3.0.0
-	 */
-	public static function importStatic($strClass, $strKey=null, $blnForce=false) {
-		$strKey = $strKey ?: $strClass;
-
-		if ($blnForce || !isset(static::$arrStaticObjects[$strKey])) {
-			static::$arrStaticObjects[$strKey] = (in_array('getInstance', get_class_methods($strClass))) ? call_user_func(array($strClass, 'getInstance')) : new $strClass();
-		}
-
-		return static::$arrStaticObjects[$strKey];
-	}
-
 	public static function idFromUuid($str_value = '') {
 		if (Validator::isUuid($str_value)) {
 			$obj_file = FilesModel::findByUuid($str_value);
