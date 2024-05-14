@@ -8,3 +8,7 @@ services:
   LeadingSystems\HelpersBundle\EventListener\ReplaceInsertTagsListener:
     tags:
       - { name: contao.hook, hook: replaceInsertTags, method: customInsertTags }
+
+  LeadingSystems\HelpersBundle\Migration\WrapperMigration:
+    tags:
+      - { name: contao.migration, priority: 0 }
