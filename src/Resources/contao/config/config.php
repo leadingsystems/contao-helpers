@@ -19,3 +19,7 @@ ArrayUtil::arrayInsert(
 
 $GLOBALS['TL_WRAPPERS']['start'][] = 'htmlWrapperStart';
 $GLOBALS['TL_WRAPPERS']['stop'][] = 'htmlWrapperStop';
+
+if (TL_MODE === 'BE') {
+    $GLOBALS['LS_API_HOOKS']['apiReceiver_processRequest'][] = array('LeadingSystems\Helpers\ls_shop_apiController_findDoubleFlexContents', 'processRequest');
+}
