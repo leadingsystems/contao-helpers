@@ -45,7 +45,7 @@ class ls_shop_apiController_findDoubleFlexContents
 	}
 
 	/**
-	 * Find Double FlexContents
+	 * Find Double FlexContents, optional parameter: limit
 	 */
 	protected function apiResource_findDoubleFlexContents()
 	{
