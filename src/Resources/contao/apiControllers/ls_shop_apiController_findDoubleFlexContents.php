@@ -2,6 +2,8 @@
 
 namespace LeadingSystems\Helpers;
 
+use Contao\Database;
+use Contao\Input;
 use Merconis\Core\ls_shop_languageHelper;
 
 class ls_shop_apiController_findDoubleFlexContents
@@ -50,7 +52,7 @@ class ls_shop_apiController_findDoubleFlexContents
 	protected function apiResource_findDoubleFlexContents()
 	{
         //limit both product and variant, limit=10 means max.10 products and max.10 variants
-		$limit = \Input::get('limit') ? intval(\Input::get('limit')) : null;
+		$limit = Input::get('limit') ? intval(Input::get('limit')) : null;
 
 
         $this->obj_apiReceiver->success();
@@ -81,14 +83,14 @@ class ls_shop_apiController_findDoubleFlexContents
 
         if($tbTable == 'tl_ls_shop_product') {
 
-            $objMethod = \Database::getInstance()->execute("
+            $objMethod = Database::getInstance()->execute("
                 SELECT		id, flex_contentsLanguageIndependent".$strSelect."
                 FROM		tl_ls_shop_product
                 ".$limit."
                 ");
         }
         if($tbTable == 'tl_ls_shop_variant') {
-            $objMethod = \Database::getInstance()->execute("
+            $objMethod = Database::getInstance()->execute("
                 SELECT		id, pid, flex_contentsLanguageIndependent".$strSelect."
                 FROM		tl_ls_shop_variant
                 ".$limit."
