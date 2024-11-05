@@ -6,7 +6,7 @@
 	<?php if (isset($this->str_label) && $this->str_label) { ?>
 		<label for="<?php echo $this->str_name; ?>"><?php echo $this->str_label; ?></label>
 	<?php } ?>
-	<input name="<?php echo $this->str_name; ?>" id="<?php echo $this->str_name; ?>" type="number" min="0" step="any" value="<?php echo $this->var_value; ?>">
+	<input name="<?php echo $this->str_name; ?>" id="<?php echo $this->str_name; ?>" type="number" min="0" step="1" value="<?php echo $this->var_value; ?>" inputmode="numeric">
 
 	<?php if (is_array($this->arr_errors) && count($this->arr_errors)) { ?>
 		<div class="errors">
