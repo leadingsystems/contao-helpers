@@ -33,7 +33,7 @@
     "contao-manager-plugin": "LeadingSystems\\HelpersBundle\\ContaoManager\\Plugin",
     "branch-alias": {
       "dev-master": "2.1.x-dev",
-      "dev-develop": "2.1.x-dev"
+      "dev-develop-2.x": "2.1.x-dev"
     }
   }
 }
