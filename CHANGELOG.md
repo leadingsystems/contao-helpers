@@ -1,6 +1,9 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
+### 2.1.4 (2024-11-07)
+ * Add new Flexwidget type: Number
+
 ### 2.1.3 (2024-06-04)
  * Improve createMultidimensionalArray
 
