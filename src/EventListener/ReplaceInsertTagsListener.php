@@ -8,7 +8,7 @@ use Contao\Input;
 
 class ReplaceInsertTagsListener {
 
-	public function customInsertTags(string $insertTag): string
+	public function customInsertTags(string $insertTag): false|string|null
     {
 		if (!preg_match('/ls_([^:]*)(::(.*))?$/', $insertTag, $matches)) {
 			return false;
