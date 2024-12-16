@@ -1,6 +1,9 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
+### 2.1.5 (2024-12-16)
+ * Fix return type custom insert tags
+
 ### 2.1.4 (2024-11-07)
  * Add new Flexwidget type: Number
 
