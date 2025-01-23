@@ -1,6 +1,11 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
+### 3.0.0 (2025-01-23)
+ * Remove htmlWrapperStart an htmlWrapperStopp
+ * fix some issues for Contao 5
+ * Note: Not compatible with Merconis 5.0 
+
 ### 2.1.3 (2024-06-04)
  * Improve createMultidimensionalArray
 
