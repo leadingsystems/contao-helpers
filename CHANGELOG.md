@@ -6,6 +6,12 @@ Leading Systems Contao Helpers bundle changelog
  * fix some issues for Contao 5
  * Note: Not compatible with Merconis 5.0 
 
+### 2.1.5 (2024-12-16)
+ * Fix return type custom insert tags
+
+### 2.1.4 (2024-11-07)
+ * Add new Flexwidget type: Number
+
 ### 2.1.3 (2024-06-04)
  * Improve createMultidimensionalArray
 
