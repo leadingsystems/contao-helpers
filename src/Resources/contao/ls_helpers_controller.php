@@ -22,7 +22,7 @@ class ls_helpers_controller extends Controller {
 	 * Prevent direct instantiation (Singleton)
 	 */
 	protected function __construct() {
-		$this->import('Database');
+		$this->import('Contao\Database');
 		parent::__construct();
 	}
 
@@ -40,20 +40,6 @@ class ls_helpers_controller extends Controller {
 			self::$objInstance = new self();
 		}
 		return self::$objInstance;
-	}
-
-	/*
-	 * Implementing the importStatic method so that we
-	 * can use it as a fallback for Contao < 3.0.0
-	 */
-	public static function importStatic($strClass, $strKey=null, $blnForce=false) {
-		$strKey = $strKey ?: $strClass;
-
-		if ($blnForce || !isset(static::$arrStaticObjects[$strKey])) {
-			static::$arrStaticObjects[$strKey] = (in_array('getInstance', get_class_methods($strClass))) ? call_user_func(array($strClass, 'getInstance')) : new $strClass();
-		}
-
-		return static::$arrStaticObjects[$strKey];
 	}
 
 	public static function idFromUuid($str_value = '') {

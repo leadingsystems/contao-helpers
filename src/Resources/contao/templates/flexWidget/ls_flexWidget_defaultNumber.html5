@@ -1,31 +1,31 @@
 <div<?php echo isset($this->arr_moreData['id']) ? ' id="'.$this->arr_moreData['id'].'"' : ''; ?> class="flexWidget flexWidget_default<?php echo isset($this->arr_moreData['class']) ? ' '.$this->arr_moreData['class'] : ''; ?>">
-	<?php if ($this->arr_moreData['headline'] ?? null) { ?>
-		<h2><?php echo $this->arr_moreData['headline']; ?></h2>
-	<?php } ?>
+    <?php if ($this->arr_moreData['headline'] ?? null) { ?>
+        <h2><?php echo $this->arr_moreData['headline']; ?></h2>
+    <?php } ?>
 
-	<?php if (isset($this->str_label) && $this->str_label) { ?>
-		<label for="<?php echo $this->str_name; ?>"><?php echo $this->str_label; ?></label>
-	<?php } ?>
-	<input
+    <?php if (isset($this->str_label) && $this->str_label) { ?>
+        <label for="<?php echo $this->str_name; ?>"><?php echo $this->str_label; ?></label>
+    <?php } ?>
+    <input
             name="<?php echo $this->str_name; ?>" id="<?php echo $this->str_name; ?>"
             type="number"
             min="0"
             value="<?php echo $this->var_value; ?>"
 
-            <?php if(isset($this->arr_moreData['decimalsAmount']) && $this->arr_moreData['decimalsAmount'] > 0){ ?>
-                step="<?=pow(10, -$this->arr_moreData['decimalsAmount'])?>"
-                inputmode="decimal"
-            <?php }else{ ?>
-                step="1"
-                inputmode="numeric"
-            <?php } ?>
+        <?php if(isset($this->arr_moreData['decimalsAmount']) && $this->arr_moreData['decimalsAmount'] > 0){ ?>
+            step="<?=pow(10, -$this->arr_moreData['decimalsAmount'])?>"
+            inputmode="decimal"
+        <?php }else{ ?>
+            step="1"
+            inputmode="numeric"
+        <?php } ?>
     >
 
-	<?php if (is_array($this->arr_errors) && count($this->arr_errors)) { ?>
-		<div class="errors">
-			<?php foreach ($this->arr_errors as $str_errorMsg) { ?>
-				<p class="error"><?php echo $str_errorMsg; ?></p>
-			<?php } ?>
-		</div>
-	<?php } ?>
+    <?php if (is_array($this->arr_errors) && count($this->arr_errors)) { ?>
+        <div class="errors">
+            <?php foreach ($this->arr_errors as $str_errorMsg) { ?>
+                <p class="error"><?php echo $str_errorMsg; ?></p>
+            <?php } ?>
+        </div>
+    <?php } ?>
 </div>
