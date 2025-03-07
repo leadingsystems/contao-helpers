@@ -32,7 +32,7 @@ class WrapperMigration extends AbstractMigration
         }
 
         if(version_compare(
-            InstalledVersions::getPrettyVersion('leadingsystems/lsce'),
+            InstalledVersions::getVersion('leadingsystems/lsce'),
             "2.0.0",
             '<'
         )){
