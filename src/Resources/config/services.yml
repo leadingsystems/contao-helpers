@@ -5,9 +5,9 @@ services:
     autoconfigure: true
     public: false
 
-  LeadingSystems\HelpersBundle\EventListener\ReplaceInsertTagsListener:
-    tags:
-      - { name: contao.hook, hook: replaceInsertTags, method: customInsertTags }
+
+  LeadingSystems\HelpersBundle\InsertTag\AsInsertTag\:
+    resource: '../../InsertTag/AsInsertTag'
 
   LeadingSystems\HelpersBundle\Migration\WrapperMigration:
     tags:
