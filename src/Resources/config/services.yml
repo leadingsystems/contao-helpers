@@ -12,3 +12,7 @@ services:
   LeadingSystems\HelpersBundle\Migration\WrapperMigration:
     tags:
       - { name: contao.migration, priority: 0 }
+
+  contao_helper.controller.page_controller:
+    class: LeadingSystems\HelpersBundle\Controller\PageController
+    public: true
