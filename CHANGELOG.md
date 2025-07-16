@@ -1,8 +1,9 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
-### 3.0.3 (2025-05-30)
+### 3.1.0 (2025-07-18)
  * improve insertTag
+ * feature getPageDetailsCached()
 
 ### 3.0.2 (2025-03-07)
  * fix installed version
