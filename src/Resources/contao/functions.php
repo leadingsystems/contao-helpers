@@ -234,6 +234,25 @@ function performanceCheckResults() {
     }
 }
 
+/**
+ * Simple RAII-style guard to start/stop performance checks automatically.
+ * Instantiate at the beginning of a scope; it will stop on destruction.
+ */
+class PerfGuard {
+    private string $key;
+
+    public function __construct(string $key, string $description = '')
+    {
+        $this->key = $key;
+        performanceCheck($key, 'start', $description);
+    }
+
+    public function __destruct()
+    {
+        performanceCheck($this->key, 'stop');
+    }
+}
+
 function ls_add($a, $b) {
     return strval(round(($a + $b), 10));
 }
