@@ -145,6 +145,128 @@ function lsDebugLog($var_variableOrString = '', $str_comment = '', $str_mode = '
     }
 }
 
+/*
+ * Lightweight performance logging helpers. These avoid debug_backtrace noise and
+ * write one compact NDJSON line per entry to a dedicated performance log file.
+ */
+/*
+ * Hard-coded configuration for performance logging. Adjust as needed.
+ */
+if (!defined('LS_HELPERS_PERF_LOG_ENABLED')) {
+    define('LS_HELPERS_PERF_LOG_ENABLED', true);
+}
+if (!defined('LS_HELPERS_PERF_LOG_MIN_MS')) {
+    define('LS_HELPERS_PERF_LOG_MIN_MS', 0.0);
+}
+/*
+ * Output format: 'plain' (two lines + blank) or 'ndjson'
+ */
+if (!defined('LS_HELPERS_PERF_LOG_FORMAT')) {
+    define('LS_HELPERS_PERF_LOG_FORMAT', 'plain');
+}
+function perfIsTruthy($var_value) {
+    if ($var_value === null) {
+        return false;
+    }
+    $str_value = strtolower(trim((string) $var_value));
+    return in_array($str_value, array('1', 'true', 'yes', 'on', 'y', 't'), true);
+}
+
+function perfIsLoggingEnabled() {
+    return (bool) LS_HELPERS_PERF_LOG_ENABLED;
+}
+
+function perfGetMinMs() {
+    return (float) LS_HELPERS_PERF_LOG_MIN_MS;
+}
+
+function perfGetRequestId() {
+    static $str_requestId = null;
+    if ($str_requestId !== null) {
+        return $str_requestId;
+    }
+    if (!empty($_SERVER['HTTP_X_REQUEST_ID'])) {
+        $str_requestId = (string) $_SERVER['HTTP_X_REQUEST_ID'];
+        return $str_requestId;
+    }
+    try {
+        $str_requestId = bin2hex(random_bytes(8));
+    } catch (\Exception $e) {
+        $str_requestId = uniqid('', true);
+    }
+    return $str_requestId;
+}
+
+function perfResolveLogDir($str_logPath = '') {
+    if ($str_logPath) {
+        return $str_logPath;
+    }
+    if (($container = System::getContainer()) !== null) {
+        $str = $container->getParameter('kernel.logs_dir');
+        if ($str) {
+            return $str;
+        }
+        $proj = $container->getParameter('kernel.project_dir');
+        if ($proj) {
+            return $proj.'/var/logs';
+        }
+    }
+    return __DIR__.'/log';
+}
+
+function perfLog($arr_entry, $str_logPath = '', $str_filename = 'performance.log') {
+    $str_dir = perfResolveLogDir($str_logPath);
+    if (!file_exists($str_dir) || !is_dir($str_dir)) {
+        @mkdir($str_dir);
+    }
+
+    if (!isset($arr_entry['requestId'])) {
+        $arr_entry['requestId'] = perfGetRequestId();
+    }
+    if (!isset($arr_entry['ts'])) {
+        $arr_entry['ts'] = date('c');
+    }
+
+    if (LS_HELPERS_PERF_LOG_FORMAT === 'ndjson') {
+        $str_line = json_encode($arr_entry, JSON_UNESCAPED_SLASHES);
+        error_log($str_line."\r\n", 3, $str_dir.'/'.$str_filename);
+        return;
+    }
+
+    /* plain, two-line format with fixed-width second line */
+    $key = isset($arr_entry['key']) ? (string) $arr_entry['key'] : '';
+    $totalMs = isset($arr_entry['totalMs']) ? (float) $arr_entry['totalMs'] : 0.0;
+    $starts = isset($arr_entry['starts']) ? (int) $arr_entry['starts'] : 0;
+    $stops = isset($arr_entry['stops']) ? (int) $arr_entry['stops'] : 0;
+    $avgMs = isset($arr_entry['avgMs']) ? (float) $arr_entry['avgMs'] : 0.0;
+    $desc = isset($arr_entry['description']) ? (string) $arr_entry['description'] : '';
+    $requestId = isset($arr_entry['requestId']) ? (string) $arr_entry['requestId'] : '';
+    $ts = isset($arr_entry['ts']) ? (string) $arr_entry['ts'] : '';
+
+    $lines = array();
+    $lines[] = $key; // Line 1: key only
+
+    // Line 2: description (only if non-empty)
+    if ($desc !== '') {
+        $lines[] = $desc;
+    }
+
+    /*
+     * Line 3: fixed-width labeled columns in this order:
+     * requestId, ts, totalMs, starts, stops, avgMs
+     */
+    $col1 = sprintf('%-26s', 'requestId:'.substr($requestId, 0, 16));
+    $col2 = sprintf('%-24s', 'ts:'.substr($ts, 0, 20));
+    $col3 = sprintf('%-20s', 'totalMs:'.sprintf('%.6f', $totalMs));
+    $col4 = sprintf('%-12s', 'starts:'.$starts);
+    $col5 = sprintf('%-12s', 'stops:'.$stops);
+    $col6 = sprintf('%-20s', 'avgMs:'.sprintf('%.6f', $avgMs));
+    $lines[] = $col1.' '.$col2.' '.$col3.' '.$col4.' '.$col5.' '.$col6;
+
+    $file = $str_dir.'/'.$str_filename;
+    error_log(implode("\r\n", $lines)."\r\n\r\n", 3, $file);
+}
+
 function replaceUUIDsInErrorLog($var) {
     /*
      * Objects are currently not supported
@@ -228,7 +350,25 @@ function performanceCheckResults() {
 #	return;
     if (is_array($_SESSION['ls_x']['performanceCheck'])) {
         foreach ($_SESSION['ls_x']['performanceCheck'] as $key => $arrPerformance) {
-            lsDebugLog('Performance check ('.$key.' [starts: '.$arrPerformance['numStarts'].', stops: '.$arrPerformance['numStarts'].']): '. $arrPerformance['description'], $arrPerformance['time'], 'tmp', 'var_dump', false);
+            // Convert seconds to milliseconds with reasonable precision
+            $totalMs = isset($arrPerformance['time']) ? (float) $arrPerformance['time'] * 1000.0 : 0.0;
+            $starts = isset($arrPerformance['numStarts']) ? (int) $arrPerformance['numStarts'] : 0;
+            $stops = isset($arrPerformance['numStops']) ? (int) $arrPerformance['numStops'] : 0;
+            $avgMs = $stops > 0 ? $totalMs / max(1, $stops) : $totalMs;
+
+            if (perfIsLoggingEnabled()) {
+                $minMs = perfGetMinMs();
+                if ($totalMs >= $minMs) {
+                    perfLog(array(
+                        'key' => (string) $key,
+                        'totalMs' => round($totalMs, 6),
+                        'starts' => $starts,
+                        'stops' => $stops,
+                        'avgMs' => round($avgMs, 6),
+                        'description' => isset($arrPerformance['description']) ? (string) $arrPerformance['description'] : ''
+                    ));
+                }
+            }
             unset($_SESSION['ls_x']['performanceCheck'][$key]);
         }
     }
