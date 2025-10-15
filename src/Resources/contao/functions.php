@@ -339,9 +339,32 @@ function performanceCheck($key = null, $startStop = 'start', $description = '') 
             break;
 
         case 'stop':
-            $_SESSION['ls_x']['performanceCheck'][$key]['time'] += microtime(true) - $_SESSION['ls_x']['performanceCheck'][$key]['start'];
-            $_SESSION['ls_x']['performanceCheck'][$key]['start'] = 0;
-            $_SESSION['ls_x']['performanceCheck'][$key]['numStops']++;
+            $start = isset($_SESSION['ls_x']['performanceCheck'][$key]['start']) ? $_SESSION['ls_x']['performanceCheck'][$key]['start'] : 0;
+            if ($start > 0) {
+                $delta = microtime(true) - $start;
+                if ($delta < 0) {
+                    $delta = 0.0;
+                }
+                $_SESSION['ls_x']['performanceCheck'][$key]['time'] += $delta;
+                $_SESSION['ls_x']['performanceCheck'][$key]['start'] = 0;
+                $_SESSION['ls_x']['performanceCheck'][$key]['numStops']++;
+            } else {
+                if (empty($_SESSION['ls_x']['performanceCheck'][$key]['warnedStopWithoutStart'])) {
+                    $_SESSION['ls_x']['performanceCheck'][$key]['warnedStopWithoutStart'] = true;
+                    if (function_exists('perfIsLoggingEnabled') && perfIsLoggingEnabled()) {
+                        $starts = isset($_SESSION['ls_x']['performanceCheck'][$key]['numStarts']) ? (int) $_SESSION['ls_x']['performanceCheck'][$key]['numStarts'] : 0;
+                        $stops = isset($_SESSION['ls_x']['performanceCheck'][$key]['numStops']) ? (int) $_SESSION['ls_x']['performanceCheck'][$key]['numStops'] : 0;
+                        perfLog(array(
+                            'key' => 'performanceCheck:stopWithoutStart',
+                            'description' => 'stop called without matching start for key '.$key,
+                            'totalMs' => 0.0,
+                            'starts' => $starts,
+                            'stops' => $stops,
+                            'avgMs' => 0.0
+                        ));
+                    }
+                }
+            }
             break;
     }
 }
