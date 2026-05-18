@@ -1,6 +1,9 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
+### 2.1.6 (2026-05-18)
+ * Fix return type custom insert tags (revert)
+
 ### 2.1.5 (2024-12-16)
  * Fix return type custom insert tags
 
