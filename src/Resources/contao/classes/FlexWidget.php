@@ -321,6 +321,10 @@ class FlexWidget
 		return $this->var_value;
 	}
 
+	public function getMoreData(): array {
+		return $this->arr_moreData;
+	}
+
 	public function getOutput() {
 		return $this->str_output;
 	}
