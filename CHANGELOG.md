@@ -1,6 +1,9 @@
 Leading Systems Contao Helpers bundle changelog
 ===========================================
 
+### 3.1.1 (2026-06-26)
+ * improve FlexWidget: add Getter
+
 ### 3.1.0 (2025-07-18)
  * improve insertTag
  * feature getPageDetailsCached()
